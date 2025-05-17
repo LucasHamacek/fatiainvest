@@ -31,11 +31,7 @@ function renderStocks(stocks, start, count) {
         const s = stocks[i];
         const clone = document.importNode(template, true);
         clone.querySelector("[data-ticker]").textContent = s.ticker;
-        let companhia = s.companhia || "";
-        if (companhia.length > 21) {
-            companhia = companhia.slice(0, 21).trimEnd() + "...";
-        }
-        clone.querySelector("[data-companhia]").textContent = companhia;
+        clone.querySelector("[data-companhia]").textContent = s.companhia;
         clone.querySelector("[data-valorMaximoPadrao]").textContent = `$${Number(s.valorMaximoPadrao).toFixed(2)}`;
         clone.querySelector("[data-dyMedio]").textContent = `${(Number(s.dyMedio) * 100).toFixed(2)}%`;
         list.appendChild(clone);
