@@ -11,28 +11,27 @@
   </style>
 </head>
 
-<body class="bg-[#f5f5f5] p-4">
+<body class="font-['Inter'] text-[#111112] bg-[#f5f5f5] p-4">
   <div id="stock-list" class="space-y-4"></div>
 
   <!-- Template para os cards -->
-<template id="card-template">
-  <div class="bg-[#E8E8E8] p-4 rounded-xl flex items-center">
-    <div class="font-['Inter'] text-[#111112] flex flex-col gap-1 flex-1 min-w-0">
-      <div class="text-4xl text-left font-medium" data-ticker></div>
-      <div class="text-base text-left font-light text-[#A2A2A3] truncate max-w-full overflow-hidden whitespace-nowrap" data-companhia></div>
-    </div>
-    <div class="font-['Inter'] text-[#111112] flex flex-col gap-1 w-32 flex-shrink-0">
-      <div class="flex justify-end gap-1">
-        <div class="text-sm font-light">PM</div>
-        <div class="text-2xl font-normal" data-valorMaximoPadrao></div>
+  <template id="card-template">
+    <div class="card-stock bg-[#E8E8E8] p-4 rounded-xl flex items-center">
+      <div class="flex flex-col gap-1 flex-1 min-w-0">
+        <div class="text-4xl text-left font-medium" data-ticker></div>
+        <div class="text-base text-left font-light text-[#A2A2A3] truncate max-w-full overflow-hidden whitespace-nowrap"
+          data-companhia></div>
       </div>
-      <div class="flex justify-end gap-1">
-        <div class="text-sm font-light">DY</div>
-        <div class="text-xl font-normal" data-dyMedio></div>
+      <div class="flex flex-col gap-1 w-32 flex-shrink-0">
+        <div class="flex justify-end items-end gap-1">
+          <div class="text-2xl font-medium" data-valorMaximoPadrao></div>
+        </div>
+        <div class="flex justify-end items-end gap-1">
+          <div class="text-xl font-normal" data-dyMedio></div>
+        </div>
       </div>
     </div>
-  </div>
-</template>
+  </template>
 
   <script src="js/main.js"></script>
 </body>
