@@ -31,9 +31,13 @@ function renderStocks(stocks, start, count) {
         const s = stocks[i];
         const clone = document.importNode(template, true);
         clone.querySelector("[data-ticker]").textContent = s.ticker;
-        clone.querySelector("[data-companhia]").textContent = s.companhia;
-        clone.querySelector("[data-valorMaximoPadrao]").textContent = `$${Number(s.valorMaximoPadrao).toFixed(2)}`;
-        clone.querySelector("[data-dyMedio]").textContent = `${(Number(s.dyMedio) * 100).toFixed(2)}%`;
+        clone.querySelector("[data-companhia]").textContent = (s.companhia || "").replace(/\s+$/, "");
+        clone.querySelector("[data-valorMaximoPadrao]").innerHTML = `${Number(s.valorMaximoPadrao).toFixed(2)} <span class="text-sm font-light">BRL</span>`;
+        clone.querySelector("[data-dyMedio]").innerHTML = `${(Number(s.dyMedio) * 100).toFixed(2)}% <span class="text-sm font-light">DY</span>`;
+        // Adicione o evento de clique no card
+        clone.querySelector('.card-stock').addEventListener('click', () => {
+            window.location.href = `detalhe.html?ticker=${encodeURIComponent(s.ticker)}`;
+        });
         list.appendChild(clone);
     }
 }
