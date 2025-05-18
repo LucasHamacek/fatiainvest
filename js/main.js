@@ -23,6 +23,46 @@ async function fetchStocks() {
     }
 }
 
+// Filtro por setor
+let setorSelecionado = "Todos";
+
+document.querySelectorAll('.setor-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    // Atualiza visual
+    document.querySelectorAll('.setor-btn').forEach(b => {
+      b.classList.remove('bg-white', 'font-semibold', 'text-black');
+      b.classList.add('text-gray-500', 'font-normal');
+    });
+    this.classList.add('bg-white', 'font-semibold', 'text-black');
+    this.classList.remove('text-gray-500', 'font-normal');
+
+    setorSelecionado = this.dataset.setor;
+    filtrarEAjustar();
+  });
+});
+
+// Função para filtrar por setor e pesquisa
+function filtrarEAjustar() {
+  const termo = document.getElementById('search').value.trim().toLowerCase();
+  let filtrados = allStocks;
+
+  if (setorSelecionado !== "Todos") {
+    filtrados = filtrados.filter(s => (s.setorUnico || '').toLowerCase() === setorSelecionado.toLowerCase());
+  }
+  if (termo) {
+    filtrados = filtrados.filter(s =>
+      s.ticker.toLowerCase().includes(termo) ||
+      (s.companhia || '').toLowerCase().includes(termo)
+    );
+  }
+  document.getElementById("stock-list").innerHTML = "";
+  renderedCount = PAGE_SIZE;
+  renderStocks(filtrados, 0, renderedCount);
+}
+
+// Atualize o filtro de pesquisa para usar filtrarEAjustar
+document.getElementById('search').addEventListener('input', filtrarEAjustar);
+
 function renderStocks(stocks, start, count) {
     const list = document.getElementById("stock-list");
     const template = document.getElementById("card-template").content;

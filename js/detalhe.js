@@ -22,27 +22,27 @@ function renderDetalhe(stock) {
         <div class="grid grid-cols-2 gap-4">
           <div>
             <div class="font-medium text-lg">${Number(stock.valorMaximoPadrao).toFixed(2)}<span class="text-sm font-light"> BRL</span></div>
-            <div class="text-base text-left font-light text-[#A2A2A3]">Preço Máximo</div>
+            <div class="text-sm text-left font-light text-[#A2A2A3]">Preço Máximo</div>
           </div>
           <div>
             <div class="font-medium text-lg">${Number(stock.valorAtual || 0).toFixed(2)}<span class="text-sm font-light"> BRL</span></div>
-            <div class="text-base text-left font-light text-[#A2A2A3]">Preço Atual</div>
+            <div class="text-sm text-left font-light text-[#A2A2A3]">Preço Atual</div>
           </div>
           <div>
             <div class="font-medium text-lg">${(Number(stock.variacaoValorMaximoPadrao) * 100).toFixed(2)}%</div>
-            <div class="text-base text-left font-light text-[#A2A2A3]">Variação</div>
+            <div class="text-sm text-left font-light text-[#A2A2A3]">Variação</div>
           </div>
           <div>
             <div class="font-medium text-lg">${Number(stock.dividendoMedio || 0).toFixed(2)}<span class="text-sm font-light"> BRL</span></div>
-            <div class="text-base text-left font-light text-[#A2A2A3]">Dividendo Médio</div>
+            <div class="text-sm text-left font-light text-[#A2A2A3]">Dividendo Médio</div>
           </div>
           <div>
             <div class="font-medium text-lg">${(Number(stock.dyMedio) * 100).toFixed(2)}%</div>
-            <div class="text-base text-left font-light text-[#A2A2A3]">Dividend Yield</div>
+            <div class="text-sm text-left font-light text-[#A2A2A3]">Dividend Yield</div>
           </div>
           <div>
-            <div class="font-bold text-base">${(Number(stock.projecaoDy) * 100).toFixed(2)}%</div>
-            <div class="text-base text-left font-light text-[#A2A2A3]">Projeção Dividend Yield</div>
+            <div class="font-medium text-base">${(Number(stock.projecaoDy) * 100).toFixed(2)}%</div>
+            <div class="text-sm text-left font-light text-[#A2A2A3]">Projeção Dividend Yield</div>
           </div>
         </div>
       </div>
