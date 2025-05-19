@@ -3,19 +3,19 @@ const ticker = urlParams.get('ticker');
 
 // Busque os dados da API (igual ao main.js)
 async function fetchStocks() {
-    const SHEETY_URL = "https://api.sheety.co/a29cb7c503fdebe716d141ffecf20c16/dataFatiaInvest/dataOutputPremiumBrasil3641";
-    const res = await fetch(SHEETY_URL);
-    const json = await res.json();
-    const data = json.dataOutputPremiumBrasil3641 || json.lista || json.stocks || [];
-    return data.slice(1);
+  const SHEETY_URL = "https://api.sheety.co/a29cb7c503fdebe716d141ffecf20c16/dataFatiaInvest/dataOutputPremiumBrasil3641";
+  const res = await fetch(SHEETY_URL);
+  const json = await res.json();
+  const data = json.dataOutputPremiumBrasil3641 || json.lista || json.stocks || [];
+  return data.slice(1);
 }
 
 function renderDetalhe(stock) {
-    if (!stock) {
-        document.getElementById('detalhe-card').innerHTML = '<p>Ação não encontrada.</p>';
-        return;
-    }
-    document.getElementById('detalhe-card').innerHTML = `
+  if (!stock) {
+    document.getElementById('detalhe-card').innerHTML = '<p>Ação não encontrada.</p>';
+    return;
+  }
+  document.getElementById('detalhe-card').innerHTML = `
       <div class="bg-[#E8E8E8] p-6 rounded-2xl max-w-md mx-auto">
         <div class="text-4xl text-left font-medium">${stock.ticker}</div>
         <div class="text-base text-left font-light text-[#A2A2A3] mb-4">${stock.companhia}</div>
@@ -50,7 +50,7 @@ function renderDetalhe(stock) {
 }
 
 (async () => {
-    const stocks = await fetchStocks();
-    const stock = stocks.find(s => s.ticker === ticker);
-    renderDetalhe(stock);
+  const stocks = await fetchStocks();
+  const stock = stocks.find(s => s.ticker === ticker);
+  renderDetalhe(stock);
 })();

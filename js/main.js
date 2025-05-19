@@ -1,100 +1,161 @@
-/* ==================== CONFIGURAÇÃO ==================== */
-const SHEETY_URL = "https://api.sheety.co/a29cb7c503fdebe716d141ffecf20c16/dataFatiaInvest/dataOutputPremiumBrasil3641";
+// Configuração do Supabase
+const SUPABASE_URL = 'https://dblzsjtnokhbkfimghjw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibHpzanRub2toYmtmaW1naGp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NTMyMTgsImV4cCI6MjA2MzIyOTIxOH0.maoqreHeJbNH6Y6AjPGNMJcpAbwqb8UUcV1ldPj_Wi0';
 
-/* ==================== VARIÁVEIS DE CONTROLE ==================== */
-let allStocks = [];
-let renderedCount = 0;
-const PAGE_SIZE = 10;
+// Inicializar o cliente Supabase
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* ==================== FUNÇÕES ==================== */
-async function fetchStocks() {
-    try {
-        const res = await fetch(SHEETY_URL);
-        if (!res.ok) throw new Error("Erro ao buscar dados do Sheety");
-        const json = await res.json();
-        console.log(json);
-        // Pega o array correto e ignora as duas primeiras linhas
-        const data = json.dataOutputPremiumBrasil3641 || json.lista || json.stocks || [];
-        return data.slice(1);
-    } catch (err) {
-        console.error(err);
-        alert("Falha ao carregar dados. Verifique o console.");
-        return [];
-    }
+// Elementos DOM
+const stockList = document.getElementById('stock-list');
+const cardTemplate = document.getElementById('card-template');
+const searchInput = document.getElementById('search');
+let setorAtivo = 'Todos';
+let todasAcoes = [];
+
+// Controle de paginação
+let itensPorPagina = 10;
+let paginaAtual = 1;
+let carregando = false;
+let acoesFiltradasGlobal = [];
+
+// Tickes a ocultar
+const tickersOcultos = ["AESB3", "CIEL3", "ENAT3", "ODPV3", "TRPL3", "TRPL4"]; // Adicione aqui os tickers que deseja ocultar
+
+// Carregar dados pré-calculados do Supabase
+async function carregarDados() {
+  try {
+    const { data, error } = await supabaseClient.rpc('calcular_dados_acoes');
+    if (error) throw error;
+
+    todasAcoes = data;
+    aplicarFiltros();
+
+    // Configurar eventos para filtros
+    document.querySelectorAll('.setor-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.setor-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setorAtivo = btn.getAttribute('data-setor');
+        paginaAtual = 1;
+        aplicarFiltros();
+      });
+    });
+
+    searchInput.addEventListener('input', () => {
+      paginaAtual = 1;
+      aplicarFiltros();
+    });
+
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+  }
 }
 
-// Filtro por setor
-let setorSelecionado = "Todos";
+// Renderiza apenas os itens da página atual (append)
+function renderizarAcoesPaginado(acoes, append = false) {
+  if (!append) stockList.innerHTML = '';
 
-document.querySelectorAll('.setor-btn').forEach(btn => {
-  btn.addEventListener('click', function () {
-    // Atualiza visual
-    document.querySelectorAll('.setor-btn').forEach(b => {
-      b.classList.remove('bg-white', 'font-semibold', 'text-black');
-      b.classList.add('text-gray-500', 'font-normal');
-    });
-    this.classList.add('bg-white', 'font-semibold', 'text-black');
-    this.classList.remove('text-gray-500', 'font-normal');
+  const inicio = (paginaAtual - 1) * itensPorPagina;
+  const fim = paginaAtual * itensPorPagina;
 
-    setorSelecionado = this.dataset.setor;
-    filtrarEAjustar();
+  acoes.slice(inicio, fim).forEach(acao => {
+    const card = cardTemplate.content.cloneNode(true);
+
+    card.querySelector('[data-ticker]').textContent = acao.ticker || '';
+    card.querySelector('[data-companhia]').textContent = acao.companhia || '';
+    card.querySelector('[data-preco_max_calc]').innerHTML =
+      acao.preco_max_calc !== undefined
+        ? `${acao.preco_max_calc.toFixed(2)} <span class="text-base font-light">BRL</span>`
+        : '';
+    card.querySelector('[data-dy_medio_calc]').innerHTML =
+      acao.dy_medio_calc !== undefined
+        ? `${acao.dy_medio_calc.toFixed(2)}% <span class="text-base font-light"> DY</span>`
+        : '';
+
+    stockList.appendChild(card);
   });
+
+  carregando = false;
+}
+
+// Aplicar filtros (pesquisa + setor)
+function aplicarFiltros() {
+  const termoPesquisa = searchInput.value.toLowerCase();
+
+  acoesFiltradasGlobal = todasAcoes
+    .filter(acao => !tickersOcultos.includes(acao.ticker))
+    .filter(acao => {
+      // Filtro de pesquisa
+      const matchesPesquisa =
+        (acao.ticker && acao.ticker.toLowerCase().includes(termoPesquisa)) ||
+        (acao.companhia && acao.companhia.toLowerCase().includes(termoPesquisa));
+
+      // Filtro de setor
+      const matchesSetor =
+        setorAtivo === 'Todos' ||
+        (acao.setor && acao.setor === setorAtivo);
+
+      return matchesPesquisa && matchesSetor;
+    });
+
+  renderizarAcoesPaginado(acoesFiltradasGlobal, false);
+}
+
+const selectOrdenar = document.getElementById('ordenar');
+
+// Adicione este evento logo após o carregamento dos dados
+if (selectOrdenar) {
+  selectOrdenar.addEventListener('change', () => {
+    paginaAtual = 1;
+    aplicarFiltros();
+  });
+}
+
+// Modifique a função aplicarFiltros para ordenar:
+function aplicarFiltros() {
+  const termoPesquisa = searchInput.value.toLowerCase();
+
+  acoesFiltradasGlobal = todasAcoes
+    .filter(acao => !tickersOcultos.includes(acao.ticker))
+    .filter(acao => {
+      // Filtro de pesquisa
+      const matchesPesquisa =
+        (acao.ticker && acao.ticker.toLowerCase().includes(termoPesquisa)) ||
+        (acao.companhia && acao.companhia.toLowerCase().includes(termoPesquisa));
+
+      // Filtro de setor
+      const matchesSetor =
+        setorAtivo === 'Todos' ||
+        (acao.setor && acao.setor === setorAtivo);
+
+      return matchesPesquisa && matchesSetor;
+    });
+
+  // Ordenação
+  if (valorOrdenar) {
+    const [campo, ordem] = valorOrdenar.split('-');
+    acoesFiltradasGlobal.sort((a, b) => {
+      if (ordem === 'asc') return (a[campo] ?? 0) - (b[campo] ?? 0);
+      else return (b[campo] ?? 0) - (a[campo] ?? 0);
+    });
+  }
+
+  renderizarAcoesPaginado(acoesFiltradasGlobal, false);
+}
+
+// Carregamento infinito ao rolar
+window.addEventListener('scroll', () => {
+  if (carregando) return;
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+    if (acoesFiltradasGlobal.length > paginaAtual * itensPorPagina) {
+      carregando = true;
+      paginaAtual++;
+      renderizarAcoesPaginado(acoesFiltradasGlobal, true);
+    }
+  }
 });
 
-// Função para filtrar por setor e pesquisa
-function filtrarEAjustar() {
-  const termo = document.getElementById('search').value.trim().toLowerCase();
-  let filtrados = allStocks;
-
-  if (setorSelecionado !== "Todos") {
-    filtrados = filtrados.filter(s => (s.setorUnico || '').toLowerCase() === setorSelecionado.toLowerCase());
-  }
-  if (termo) {
-    filtrados = filtrados.filter(s =>
-      s.ticker.toLowerCase().includes(termo) ||
-      (s.companhia || '').toLowerCase().includes(termo)
-    );
-  }
-  document.getElementById("stock-list").innerHTML = "";
-  renderedCount = PAGE_SIZE;
-  renderStocks(filtrados, 0, renderedCount);
-}
-
-// Atualize o filtro de pesquisa para usar filtrarEAjustar
-document.getElementById('search').addEventListener('input', filtrarEAjustar);
-
-function renderStocks(stocks, start, count) {
-    const list = document.getElementById("stock-list");
-    const template = document.getElementById("card-template").content;
-
-    for (let i = start; i < Math.min(start + count, stocks.length); i++) {
-        const s = stocks[i];
-        const clone = document.importNode(template, true);
-        clone.querySelector("[data-ticker]").textContent = s.ticker;
-        clone.querySelector("[data-companhia]").textContent = (s.companhia || "").replace(/\s+$/, "");
-        clone.querySelector("[data-valorMaximoPadrao]").innerHTML = `${Number(s.valorMaximoPadrao).toFixed(2)} <span class="text-sm font-light">BRL</span>`;
-        clone.querySelector("[data-dyMedio]").innerHTML = `${(Number(s.dyMedio) * 100).toFixed(2)}% <span class="text-sm font-light">DY</span>`;
-        // Adicione o evento de clique no card
-        clone.querySelector('.card-stock').addEventListener('click', () => {
-            window.location.href = `detalhe.html?ticker=${encodeURIComponent(s.ticker)}`;
-        });
-        list.appendChild(clone);
-    }
-}
-
-function handleScroll() {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-        if (renderedCount < allStocks.length) {
-            renderStocks(allStocks, renderedCount, PAGE_SIZE);
-            renderedCount += PAGE_SIZE;
-        }
-    }
-}
-
-/* ==================== INICIALIZAÇÃO ==================== */
-(async () => {
-    allStocks = await fetchStocks();
-    renderedCount = PAGE_SIZE;
-    renderStocks(allStocks, 0, PAGE_SIZE);
-    window.addEventListener('scroll', handleScroll);
-})();
+// Inicializar a aplicação
+document.addEventListener('DOMContentLoaded', () => {
+  carregarDados();
+});
