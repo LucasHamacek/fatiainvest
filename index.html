@@ -133,11 +133,11 @@
   <!-- Sheet bottom -->
   <div id="sheet-overlay" class="fixed inset-0 z-30 bg-black/70 hidden transition-opacity"></div>
   <div id="sheet"
-    class="fixed inset-x-0 bottom-0 z-40 bg-white rounded-t-2xl shadow-2xl transition-all duration-300 translate-y-full h-full max-h-[30vh]">
-    <div class="flex flex-col p-6 max-w-xl mx-auto">
-      <div class="flex justify-center mb-4">
-        <div id="sheet-dragger" class="w-16 h-1.5 bg-gray-300 rounded-full cursor-pointer"></div>
-      </div>
+    class="fixed inset-x-0 bottom-0 z-40 bg-white rounded-t-2xl shadow-2xl transition-all duration-300 translate-y-full h-full max-h-[80vh]">
+    <div class="flex justify-center mt-4 mb-4">
+      <div id="sheet-dragger" class="w-16 h-1.5 bg-gray-300 rounded-full cursor-pointer"></div>
+    </div>
+    <div class="flex flex-col p-6 max-w-xl mx-auto overflow-y-auto sheet-scroll-hide" style="max-height: 80vh;">
       <div class="flex justify-between items-center mb-4">
         <h2 id="sheet-ticker" class="text-2xl font-bold"></h2>
         <button id="fecharSheet" class="text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
@@ -172,12 +172,29 @@
           </div>
         </div>
       </div>
+      <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-2 text-gray-700">Histórico de Dividendos</h3>
+        <canvas id="grafico-dividendos" height="120" class="w-full max-w-full"></canvas>
+        <table id="tabela-dividendos"
+          class="mt-4 w-full max-w-full h-fit text-center text-sm text-gray-700 divide-y divide-gray-200">
+          <thead>
+            <tr>
+              <th class="font-semibold py-1">Ano</th>
+              <th class="font-semibold py-1">Dividendo</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <!-- Linhas serão preenchidas via JS -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/main.js"></script>
     <script src="js/filtro-setor.js"></script> <!-- só se usar fade/scroll nos botões -->
     <script src="js/ordenar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>

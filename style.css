@@ -12,6 +12,15 @@
     /* Chrome, Safari, Opera */
 }
 
+/* Esconde a barra de rolagem no Chrome, Edge e Safari */
+.sheet-scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+/* Esconde a barra de rolagem no Firefox */
+.sheet-scroll-hide {
+  scrollbar-width: none;
+}
+
 #setor-filtro-wrapper {
     scrollbar-width: none;
     -ms-overflow-style: none;
