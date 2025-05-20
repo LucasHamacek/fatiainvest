@@ -90,11 +90,11 @@ function renderizarAcoesPaginado(acoes, append = false) {
     card.querySelector('[data-companhia]').textContent = acao.companhia || '';
     card.querySelector('[data-preco_max_calc]').innerHTML =
       acao.preco_max_calc !== undefined
-        ? `${acao.preco_max_calc.toFixed(2)} <span class="text-base font-light">BRL</span>`
+        ? `${acao.preco_max_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-base font-light">BRL</span>`
         : '';
     card.querySelector('[data-dy_medio_calc]').innerHTML =
       acao.dy_medio_calc !== undefined
-        ? `${acao.dy_medio_calc.toFixed(2)}% <span class="text-base font-light"> DY</span>`
+        ? `${acao.dy_medio_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}% <span class="text-base font-light"> DY</span>`
         : '';
 
     // Sheet bottom ao clicar no card
@@ -102,12 +102,63 @@ function renderizarAcoesPaginado(acoes, append = false) {
       document.getElementById('sheet-ticker').textContent = acao.ticker;
       document.getElementById('sheet-companhia').textContent = acao.companhia;
       document.getElementById('sheet-setor').textContent = acao.setor;
-      document.getElementById('sheet-preco').textContent = acao.preco_max_calc !== undefined ?
-        "R$ " + acao.preco_max_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '';
+      document.getElementById('sheet-preco').innerHTML = acao.preco_max_calc !== undefined
+        ? acao.preco_max_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+        ' <span class="text-base font-light">BRL</span>'
+        : '';
       document.getElementById('sheet-dy').textContent = acao.dy_medio_calc !== undefined ?
-        acao.dy_medio_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + "%" : '';
+        acao.dy_medio_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%" : '';
+      document.getElementById('sheet-dividendo-medio').innerHTML =
+        acao.dividendo_calc !== undefined
+          ? acao.dividendo_calc.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+          ' <span class="text-base font-light">BRL</span>'
+          : '';
       document.getElementById('sheet').classList.remove('translate-y-full');
       document.getElementById('sheet-overlay').classList.remove('hidden');
+
+      // Limpa os campos antes de buscar
+      document.getElementById('sheet-preco-atual').textContent = '...';
+      document.getElementById('sheet-variacao').textContent = '...';
+
+      // Busca o preço atual na Brapi usando token na URL
+      fetch(`https://brapi.dev/api/quote/${acao.ticker}?token=beApgDhEPuP4bPgiLLa7qn`)
+        .then(res => res.json())
+        .then(data => {
+          const precoAtual = data.results?.[0]?.regularMarketPrice;
+          if (
+            precoAtual !== undefined &&
+            acao.preco_max_calc !== undefined &&
+            acao.preco_max_calc !== 0
+          ) {
+            document.getElementById('sheet-preco-atual').innerHTML =
+              precoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+              ' <span class="text-base font-light">BRL</span>';
+
+            const variacao = ((precoAtual - acao.preco_max_calc) / acao.preco_max_calc) * 100;
+            const variacaoFormatada =
+              (variacao > 0 ? '+' : '') +
+              variacao.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+              '%';
+            document.getElementById('sheet-variacao').textContent = variacaoFormatada;
+
+            if (acao.dividendo_calc !== undefined && precoAtual > 0) {
+              const dyProjecao = (acao.dividendo_calc / precoAtual) * 100;
+              document.getElementById('sheet-dy-projecao').textContent =
+                dyProjecao.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+            } else {
+              document.getElementById('sheet-dy-projecao').textContent = 'N/A';
+            }
+          } else {
+            document.getElementById('sheet-preco-atual').textContent = 'N/A';
+            document.getElementById('sheet-variacao').textContent = 'N/A';
+            document.getElementById('sheet-dy-projecao').textContent = 'N/A';
+          }
+        })
+        .catch(() => {
+          document.getElementById('sheet-preco-atual').textContent = 'Erro';
+          document.getElementById('sheet-variacao').textContent = 'Erro';
+          document.getElementById('sheet-dy-projecao').textContent = 'Erro';
+        });
     });
 
     stockList.appendChild(card);
@@ -191,10 +242,10 @@ if (dragger && sheet) {
   dragger.addEventListener('click', () => {
     expanded = !expanded;
     if (expanded) {
-      sheet.classList.add('max-h-[90vh]');
+      sheet.classList.add('max-h-[80vh]');
       sheet.classList.remove('max-h-[30vh]');
     } else {
-      sheet.classList.remove('max-h-[90vh]');
+      sheet.classList.remove('max-h-[80vh]');
       sheet.classList.add('max-h-[30vh]');
     }
   });
