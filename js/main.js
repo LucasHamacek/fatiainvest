@@ -76,6 +76,40 @@ async function carregarDados() {
   }
 }
 
+// Função para buscar dividendos por ano no Supabase
+async function carregarGraficoDividendos(ticker) {
+  const { data, error } = await supabaseClient
+    .rpc('dividendos_por_ano', { ticker_param: ticker });
+  if (error) {
+    console.error('Erro ao buscar dividendos:', error);
+    return [];
+  }
+  return data;
+}
+
+// Função para mostrar o gráfico usando Chart.js
+async function mostrarGraficoDividendos(ticker) {
+  const dados = await carregarGraficoDividendos(ticker);
+  const ctx = document.getElementById('grafico-dividendos').getContext('2d');
+  if (window.graficoDividendos) window.graficoDividendos.destroy();
+
+  window.graficoDividendos = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: dados.map(d => d.ano),
+      datasets: [{
+        label: 'Dividendo por Ano',
+        data: dados.map(d => d.dividendo),
+        backgroundColor: '#60a5fa'
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
 // Renderiza apenas os itens da página atual (append)
 function renderizarAcoesPaginado(acoes, append = false) {
   if (!append) stockList.innerHTML = '';
@@ -98,7 +132,7 @@ function renderizarAcoesPaginado(acoes, append = false) {
         : '';
 
     // Sheet bottom ao clicar no card
-    card.querySelector('.card-stock').addEventListener('click', () => {
+    card.querySelector('.card-stock').addEventListener('click', async () => {
       document.getElementById('sheet-ticker').textContent = acao.ticker;
       document.getElementById('sheet-companhia').textContent = acao.companhia;
       document.getElementById('sheet-setor').textContent = acao.setor;
@@ -115,6 +149,23 @@ function renderizarAcoesPaginado(acoes, append = false) {
           : '';
       document.getElementById('sheet').classList.remove('translate-y-full');
       document.getElementById('sheet-overlay').classList.remove('hidden');
+      document.getElementById('sheet').classList.remove('translate-y-full');
+      document.getElementById('sheet-overlay').classList.remove('hidden');
+
+      mostrarGraficoDividendos(acao.ticker);
+
+      // Preencher a tabela de dividendos por ano
+      const dados = await carregarGraficoDividendos(acao.ticker);
+      const tabela = document.getElementById('tabela-dividendos').querySelector('tbody');
+      tabela.innerHTML = '';
+      dados.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+      <td class="py-1">${d.ano}</td>
+      <td class="py-1">R$ ${d.dividendo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+    `;
+        tabela.appendChild(tr);
+      });
 
       // Limpa os campos antes de buscar
       document.getElementById('sheet-preco-atual').textContent = '...';
