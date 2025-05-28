@@ -18,6 +18,13 @@ export default function Page() {
   const [priceView, setPriceView] = useState<PriceView>('current')
   const [sheetOpen, setSheetOpen] = useState(false)
 
+  // Definir primeira ação quando os dados carregarem
+  useEffect(() => {
+    if (stocks.length > 0 && !selectedStock) {
+      setSelectedStock(stocks[0])
+    }
+  }, [stocks, selectedStock])
+
   // Função para lidar com o clique no card (desktop vs mobile)
   const handleStockClick = (stock: StockData) => {
     setSelectedStock(stock)
@@ -26,13 +33,6 @@ export default function Page() {
       setSheetOpen(true)
     }
   }
-
-  // Definir primeira ação quando os dados carregarem
-  useEffect(() => {
-    if (stocks.length > 0 && !selectedStock) {
-      setSelectedStock(stocks[0])
-    }
-  }, [stocks, selectedStock])
 
   if (loading) {
     return <LoadingScreen progress={progress} />
