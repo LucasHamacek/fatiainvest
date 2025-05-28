@@ -33,7 +33,7 @@ export default function Home() {
 
   // Função para aplicar filtros nas ações
   const applyFilters = (stocksToFilter: StockData[]): StockData[] => {
-    let filteredStocks = stocksToFilter.filter(stock => !hiddenTickers.includes(stock.ticker))
+    const filteredStocks = stocksToFilter.filter(stock => !hiddenTickers.includes(stock.ticker))
 
     switch (selectedFilter) {
       case 'highest-dy':
@@ -51,6 +51,10 @@ export default function Home() {
           const percentageFromMax = ((maxPrice - currentPrice) / maxPrice) * 100
           return percentageFromMax >= -10 && percentageFromMax <= 10
         })
+
+      case 'consistent':
+        // Ações que distribuíram dividendos > 0 nos últimos 5 anos consecutivos
+        return filteredStocks.filter(stock => consistentStocks.has(stock.ticker))
 
       default:
         return filteredStocks
