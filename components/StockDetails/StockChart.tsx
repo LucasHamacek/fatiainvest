@@ -44,7 +44,7 @@ export const StockChart = ({ chartData, isMobile = false }: StockChartProps) => 
           dataKey="year"
           tickLine={false}
           axisLine={false}
-          tickMargin={8}
+          tickMargin={10}
           tickFormatter={(value) => value.slice(0, 4)}
           interval={0}
         />
@@ -52,8 +52,8 @@ export const StockChart = ({ chartData, isMobile = false }: StockChartProps) => 
           orientation="right"
           tickLine={false}
           axisLine={false}
-          tickMargin={8}
-          tickFormatter={(value) => isMobile ? `${value}` : `$${value}`}
+          tickMargin={10}
+          tickFormatter={(value) => isMobile ? `${value}` : `${value}`}
         />
         <ChartTooltip
           cursor={false}
