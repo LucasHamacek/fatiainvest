@@ -1,5 +1,5 @@
 // components/StockDetails/StockDetails.tsx
-import { Plus, Dot } from "lucide-react"
+import { Dot } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -7,9 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Button
-} from "@/components/ui/button"
+
 import { StockData, ChartData } from '../../types/stock.types'
 import { StockChart } from './StockChart'
 import { StockMetrics } from './StockMetrics'
