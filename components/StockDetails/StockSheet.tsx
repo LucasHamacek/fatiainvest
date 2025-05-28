@@ -25,7 +25,7 @@ interface StockSheetProps {
 export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }: StockSheetProps) => {
   return (
     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <SheetContent side="bottom" className="h-[80vh] p-4 rounded-t-md border-0 shadow-none">
+      <SheetContent side="bottom" className="h-[80vh] p-4 rounded-t-md border-0 shadow-none overflow-x-auto scrollbar">
         {selectedStock && (
           <>
             <SheetHeader className="p-0 mb-4">
@@ -40,7 +40,7 @@ export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }
               </SheetDescription>
             </SheetHeader>
 
-            <div>
+            <div className="py-4 overflow-x-auto scrollbar-hide">
               <Card className="shadow-none border-0 p-0 mb-4 bg-transparent">
                 <CardContent className="p-0">
                   <StockChart chartData={chartData} isMobile={true} />
