@@ -27,6 +27,13 @@ export default function Page() {
     }
   }
 
+  // Definir primeira ação quando os dados carregarem
+  useEffect(() => {
+    if (stocks.length > 0 && !selectedStock) {
+      setSelectedStock(stocks[0])
+    }
+  }, [stocks, selectedStock])
+
   if (loading) {
     return <LoadingScreen progress={progress} />
   }
@@ -38,9 +45,9 @@ export default function Page() {
           display: none;
         }
       `}</style>
-      
+
       <Header priceView={priceView} setPriceView={setPriceView} />
-      
+
       <div className="flex flex-1 overflow-hidden">
         <StockList
           stocks={stocks}

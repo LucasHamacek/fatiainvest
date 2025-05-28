@@ -9,7 +9,7 @@ export const useStockChart = (selectedStock: StockData | null) => {
   useEffect(() => {
     async function fetchChartData() {
       if (!selectedStock) return
-
+      
       try {
         const { data, error } = await supabase.rpc('dividendos_por_ano', {
           ticker_param: selectedStock.ticker
