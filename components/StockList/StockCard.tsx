@@ -19,7 +19,7 @@ interface StockCardProps {
 export const StockCard = ({ stock, priceView, onClick }: StockCardProps) => {
   return (
     <Card
-      className="flex flex-row justify-between items-center bg-transparent p-0 mb-2 border-0 shadow-none cursor-pointer"
+      className="flex flex-row justify-between items-center bg-transparent p-0 mb-4 border-0 shadow-none cursor-pointer"
       onClick={() => onClick(stock)}
     >
       <CardHeader className="w-full p-0 gap-0">
@@ -27,7 +27,7 @@ export const StockCard = ({ stock, priceView, onClick }: StockCardProps) => {
         <CardDescription className="truncate">{stock.companhia}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col min-w-16 items-end p-0 gap-[2px]">
-        <p className={`flex gap-1 text-sm font-semibold ${getBackgroundColor(stock)} justify-center min-w-[52px] px-1 rounded-[5px]`}>
+        <p className={`flex gap-1 text-sm font-semibold text-white ${getBackgroundColor(stock)} justify-center min-w-[52px] px-1 rounded-[5px]`}>
           {parseFloat(getDisplayPrice(stock, priceView).toString()).toFixed(2)}
         </p>
         <p className="flex gap-1 text-sm">

@@ -40,7 +40,6 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
                 </p>
               </CardDescription>
             </div>
-            <Button className="cursor-pointer"> <Plus className="size-4" />Add to List</Button>
           </CardHeader>
 
           <CardContent className="p-0">

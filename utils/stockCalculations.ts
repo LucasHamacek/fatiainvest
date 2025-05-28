@@ -29,10 +29,10 @@ export const getBackgroundColor = (stock: StockData): string => {
   const variation = ((currentPrice - maxPrice) / maxPrice) * 100
   
   if (variation > 10 || variation < -10) {
-    return 'bg-red-400 text-white'
+    return 'bg-red-400'
   } else if (variation > 5 || variation < -5) {
-    return 'bg-blue-400 text-white'
+    return 'bg-blue-400'
   } else {
-    return 'bg-green-400 text-white'
+    return 'bg-green-400'
   }
 }

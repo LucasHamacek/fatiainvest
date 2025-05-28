@@ -18,10 +18,25 @@ export default function Page() {
   const [priceView, setPriceView] = useState<PriceView>('current')
   const [sheetOpen, setSheetOpen] = useState(false)
 
+  // Lista de tickers que você quer ocultar
+  const hiddenTickers = [
+    'AESB3',
+    'CIEL3', 
+    'ENAT3',
+    'ODPV3',
+    'TRPL3',
+    'TRPL4'
+    // Adicione aqui os tickers que deseja ocultar
+  ]
+
   // Definir primeira ação quando os dados carregarem
   useEffect(() => {
     if (stocks.length > 0 && !selectedStock) {
-      setSelectedStock(stocks[0])
+      // Filtrar também a primeira ação para não selecionar um ticker oculto
+      const visibleStocks = stocks.filter(stock => !hiddenTickers.includes(stock.ticker))
+      if (visibleStocks.length > 0) {
+        setSelectedStock(visibleStocks[0])
+      }
     }
   }, [stocks, selectedStock])
 
@@ -55,6 +70,7 @@ export default function Page() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           onStockClick={handleStockClick}
+          hiddenTickers={hiddenTickers} // Adicionada a nova prop
         />
 
         <StockSheet

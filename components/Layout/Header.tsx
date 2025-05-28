@@ -20,7 +20,7 @@ interface HeaderProps {
 
 export const Header = ({ priceView, setPriceView }: HeaderProps) => {
   return (
-    <div className="flex items-center px-4 border-b border-gray-200">
+    <div className="flex items-center px-4 border-b border-gray-200 justify-between md:justify-start">
       <div>
         <svg className="size-5" viewBox="0 0 23 35" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M11.3333 23.1666C11.3333 24.6549 11.0402 26.1287 10.4706 27.5037C9.90109 28.8787 9.06629 30.1281 8.01389 31.1805C6.96149 32.2329 5.71211 33.0677 4.33708 33.6373C2.96206 34.2068 1.48832 34.5 0 34.5L4.95396e-07 23.1666H11.3333Z" fill="#74B3FB" />
@@ -45,6 +45,7 @@ export const Header = ({ priceView, setPriceView }: HeaderProps) => {
             </MenubarRadioGroup>
           </MenubarContent>
         </MenubarMenu>
+        <div className="hidden">
         <MenubarMenu>
           <MenubarTrigger>Lists</MenubarTrigger>
           <MenubarContent className="shadow-xs">
@@ -71,6 +72,7 @@ export const Header = ({ priceView, setPriceView }: HeaderProps) => {
             <MenubarItem>Log Out</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
+        </div>
       </Menubar>
     </div>
   )

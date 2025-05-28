@@ -25,18 +25,18 @@ interface StockSheetProps {
 export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }: StockSheetProps) => {
   return (
     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <SheetContent side="bottom" className="h-[80vh] p-4 rounded-t-md">
+      <SheetContent side="bottom" className="h-[80vh] p-4 rounded-t-md border-0 shadow-none">
         {selectedStock && (
           <>
             <SheetHeader className="p-0 mb-4">
-              <SheetTitle className="text-2xl font-bold">
-                {selectedStock.ticker}
-                <span className="text-gray-500 text-sm font-normal ml-1"> {selectedStock.companhia}</span>
-              </SheetTitle>
+              <div>
+                <SheetTitle className="text-2xl font-bold"> {selectedStock.ticker} </SheetTitle>
+                <p className="text-gray-500 text-sm font-normal pr-6"> {selectedStock.companhia}</p>
+              </div>
               <SheetDescription className="flex items-center">
-                  Ibovespa <Dot className="size-5" />
-                  <span>{selectedStock.setor || 'N/A'}</span> <Dot className="size-5" />
-                  <span>BRL</span>
+                Ibovespa <Dot className="size-5" />
+                <span>{selectedStock.setor || 'N/A'}</span> <Dot className="size-5" />
+                <span>BRL</span>
               </SheetDescription>
             </SheetHeader>
 

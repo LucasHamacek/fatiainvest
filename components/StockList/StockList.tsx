@@ -9,17 +9,23 @@ interface StockListProps {
   searchTerm: string
   setSearchTerm: (term: string) => void
   onStockClick: (stock: StockData) => void
+  hiddenTickers?: string[] // Nova prop opcional para tickers ocultos
 }
 
-export const StockList = ({ 
-  stocks, 
-  priceView, 
-  searchTerm, 
-  setSearchTerm, 
-  onStockClick 
+export const StockList = ({
+  stocks,
+  priceView,
+  searchTerm,
+  setSearchTerm,
+  onStockClick,
+  hiddenTickers = [] // Array vazio como padrão
 }: StockListProps) => {
-  // Filtrar ações baseado na pesquisa
-  const filteredStocks = stocks.filter(stock =>
+  // Primeiro filtrar tickers ocultos, depois aplicar filtro de pesquisa
+  const visibleStocks = stocks.filter(stock => 
+    !hiddenTickers.includes(stock.ticker)
+  )
+  
+  const filteredStocks = visibleStocks.filter(stock =>
     stock.ticker?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     stock.companhia?.toLowerCase().includes(searchTerm.toLowerCase())
   )
