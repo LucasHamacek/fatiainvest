@@ -25,10 +25,10 @@ interface StockSheetProps {
 export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }: StockSheetProps) => {
   return (
     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <SheetContent side="bottom" className="h-[80vh] p-4 rounded-t-md border-0 shadow-none overflow-x-auto scrollbar">
+      <SheetContent side="bottom" className="h-[80vh] py-4 gap-0 rounded-t-md border-0 shadow-none overflow-x-auto scrollbar">
         {selectedStock && (
           <>
-            <SheetHeader className="p-0 mb-4">
+            <SheetHeader className="p-0 px-4 mb-4">
               <div>
                 <SheetTitle className="text-2xl font-bold"> {selectedStock.ticker} </SheetTitle>
                 <p className="text-gray-500 text-sm font-normal pr-6"> {selectedStock.companhia}</p>
@@ -40,7 +40,7 @@ export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }
               </SheetDescription>
             </SheetHeader>
 
-            <div className="py-4 overflow-x-auto scrollbar-hide">
+            <div className="px-4 overflow-x-auto scrollbar-hide">
               <Card className="shadow-none border-0 p-0 mb-4 bg-transparent">
                 <CardContent className="p-0">
                   <StockChart chartData={chartData} isMobile={true} />
