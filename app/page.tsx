@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { StockData, PriceView, DividendData } from '../types/stock.types'
+import { StockData, PriceView, } from '../types/stock.types'
 import { useStocks } from '../hooks/useStocks'
 import { useStockChart } from '../hooks/useStockChart'
 import { FilterOption } from '../components/StockList/FilterSelect'
@@ -19,7 +19,7 @@ export default function Home() {
   const [priceView, setPriceView] = useState<PriceView>('current')
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none')
-  const [consistentStocks, setConsistentStocks] = useState<Set<string>>(new Set())
+  const [consistentStocks,] = useState<Set<string>>(new Set())
 
   // Lista de tickers que você quer ocultar
   const hiddenTickers = [
