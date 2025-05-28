@@ -52,10 +52,6 @@ export default function Home() {
           return percentageFromMax >= -10 && percentageFromMax <= 10
         })
 
-      case 'consistent':
-        // Ações que distribuíram dividendos > 0 nos últimos 5 anos consecutivos
-        return filteredStocks.filter(stock => consistentStocks.has(stock.ticker))
-
       default:
         return filteredStocks
     }
