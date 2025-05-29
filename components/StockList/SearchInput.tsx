@@ -9,7 +9,7 @@ interface SearchInputProps {
 
 export const SearchInput = ({ searchTerm, setSearchTerm }: SearchInputProps) => {
   return (
-    <div className="relative mb-4">
+    <div className="relative">
       <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground"></Search>
       <Input
         placeholder="Search"

@@ -17,15 +17,15 @@ interface FilterSelectProps {
 export const FilterSelect = ({ selectedFilter, onFilterChange }: FilterSelectProps) => {
   const filterOptions = [
     { value: 'none' as FilterOption, label: 'All Stocks' },
-    { value: 'highest-dy' as FilterOption, label: 'Highest DY' },
+    { value: 'highest-dy' as FilterOption, label: 'Highest Dividend Yield' },
     { value: 'opportunity' as FilterOption, label: 'Opportunity' },
     { value: 'consistent' as FilterOption, label: 'Consistent' }
   ]
 
   return (
-    <div className="mb-1">
+    <div className="mb-2">
       <Select value={selectedFilter} onValueChange={onFilterChange}>
-        <SelectTrigger className="text-[#007AFF] text-base font-medium p-0 border-0 focus-visible:ring-0 shadow-none">
+        <SelectTrigger className="text-[#007AFF] text-lg font-medium p-0 border-0 focus-visible:ring-0 shadow-none">
           <SelectValue placeholder="Filtrar ações" />
         </SelectTrigger>
         <SelectContent>

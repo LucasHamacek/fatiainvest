@@ -1,3 +1,4 @@
+// Home.tsx atualizado
 "use client"
 
 import { useState, useEffect } from 'react'
@@ -92,14 +93,18 @@ export default function Home() {
         }
       `}</style>
 
-      <Header priceView={priceView} setPriceView={setPriceView} />
+      <Header 
+        priceView={priceView} 
+        setPriceView={setPriceView}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
 
       <div className="flex flex-1 overflow-hidden">
         <StockList
           stocks={applyFilters(stocks)}
           priceView={priceView}
           searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
           onStockClick={handleStockClick}
           selectedFilter={selectedFilter}
           onFilterChange={setSelectedFilter}
