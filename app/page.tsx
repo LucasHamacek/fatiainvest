@@ -13,7 +13,7 @@ import { StockDetails } from '../components/StockDetails/StockDetails'
 import { StockSheet } from '../components/StockDetails/StockSheet'
 
 export default function Home() {
-  const { stocks, loading, progress } = useStocks()
+  const { stocks, loading, } = useStocks()
   const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
   const { chartData } = useStockChart(selectedStock)
   const [searchTerm, setSearchTerm] = useState('')

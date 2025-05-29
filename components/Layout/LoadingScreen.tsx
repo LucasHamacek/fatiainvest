@@ -1,8 +1,6 @@
 // components/Layout/LoadingScreen.tsx
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
-interface LoadingScreenProps {}
-
 export const LoadingScreen = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-6">
