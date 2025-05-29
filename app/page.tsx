@@ -81,7 +81,7 @@ export default function Home() {
   }
 
   if (loading) {
-    return <LoadingScreen progress={progress} />
+    return <LoadingScreen />
   }
 
   return (
