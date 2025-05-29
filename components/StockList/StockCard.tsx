@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { StockData, } from '../../types/stock.types'
-import { getDisplayPrice } from '../../utils/stockCalculations'
 import { getBackgroundColor } from '../../utils/stockCalculations'
 
 interface StockCardProps {

@@ -1,5 +1,5 @@
 // utils/stockCalculations.ts
-import { StockData, PriceView } from '../types/stock.types'
+import { StockData, } from '../types/stock.types'
 
 // Calcular variação (simulada - você pode ajustar conforme sua lógica)
 export const calculateVariation = (currentPrice: number | null, maxPrice: number | null): string => {
@@ -13,11 +13,6 @@ export const calculateVariation = (currentPrice: number | null, maxPrice: number
 export const calculateDYProjection = (dividendoCalc: number | null, precoAtual: number | null): string => {
   if (!dividendoCalc || !precoAtual) return '0.00'
   return ((dividendoCalc / precoAtual) * 100).toFixed(2)
-}
-
-// Função para obter o preço a ser exibido baseado na seleção do radio
-export const getDisplayPrice = (stock: StockData, priceView: PriceView): number => {
-  return priceView === 'max' ? (stock.preco_max_calc || 0) : (stock.preco_atual || 0)
 }
 
 export const getBackgroundColor = (stock: StockData): string => {
