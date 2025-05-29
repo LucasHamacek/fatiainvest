@@ -17,7 +17,6 @@ export default function Home() {
   const [selectedStock, setSelectedStock] = useState<StockData | null>(null)
   const { chartData } = useStockChart(selectedStock)
   const [searchTerm, setSearchTerm] = useState('')
-  const [priceView, setPriceView] = useState<PriceView>('current')
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none')
   const [consistentStocks,] = useState<Set<string>>(new Set())
