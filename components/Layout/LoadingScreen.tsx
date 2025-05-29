@@ -11,7 +11,7 @@ export const LoadingScreen = () => {
           autoplay
         />
       </div>
-      <div className="text-lg font-medium text-gray-700">
+      <div className="text-base font-medium text-gray-500">
         Carregando dados...
       </div>
     </div>
