@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { StockData, PriceView, } from '../types/stock.types'
+import { StockData, } from '../types/stock.types'
 import { useStocks } from '../hooks/useStocks'
 import { useStockChart } from '../hooks/useStockChart'
 import { FilterOption } from '../components/StockList/FilterSelect'
@@ -93,8 +93,6 @@ export default function Home() {
       `}</style>
 
       <Header 
-        priceView={priceView} 
-        setPriceView={setPriceView}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
@@ -102,7 +100,6 @@ export default function Home() {
       <div className="flex flex-1 overflow-hidden">
         <StockList
           stocks={applyFilters(stocks)}
-          priceView={priceView}
           searchTerm={searchTerm}
           onStockClick={handleStockClick}
           selectedFilter={selectedFilter}

@@ -1,16 +1,13 @@
 
 // components/Layout/Header.tsx
-import { PriceView } from '../../types/stock.types'
 import { SearchInput } from '../StockList/SearchInput'
 
 interface HeaderProps {
-  priceView: PriceView
-  setPriceView: (view: PriceView) => void
   searchTerm: string
   setSearchTerm: (term: string) => void
 }
 
-export const Header = ({ priceView, setPriceView, searchTerm, setSearchTerm }: HeaderProps) => {
+export const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
   return (
     <div className='flex items-center gap-2 p-4 md:border-b border-gray-200'>
       <svg className="size-6" viewBox="0 0 23 35" fill="none" xmlns="http://www.w3.org/2000/svg">

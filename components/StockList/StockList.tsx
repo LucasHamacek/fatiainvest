@@ -1,10 +1,9 @@
-import { StockData, PriceView } from '../../types/stock.types'
+import { StockData, } from '../../types/stock.types'
 import { StockCard } from './StockCard'
 import { FilterSelect, FilterOption } from './FilterSelect'
 
 interface StockListProps {
   stocks: StockData[]
-  priceView: PriceView
   searchTerm: string
   onStockClick: (stock: StockData) => void
   selectedFilter: FilterOption
@@ -13,7 +12,6 @@ interface StockListProps {
 
 export const StockList = ({
   stocks,
-  priceView,
   searchTerm,
   onStockClick,
   selectedFilter,
@@ -34,7 +32,6 @@ export const StockList = ({
           <StockCard
             key={stock.ticker}
             stock={stock}
-            priceView={priceView}
             onClick={onStockClick}
           />
         ))}

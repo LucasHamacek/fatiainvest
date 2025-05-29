@@ -19,5 +19,3 @@ export interface ChartData {
   year: string
   Dividend: number
 }
-
-export type PriceView = 'current' | 'max'
