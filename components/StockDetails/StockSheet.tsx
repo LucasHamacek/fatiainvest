@@ -25,7 +25,7 @@ interface StockSheetProps {
 export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }: StockSheetProps) => {
   return (
     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <SheetContent side="bottom" className="h-[80vh] py-4 gap-0 rounded-t-md border-0 shadow-none overflow-x-auto scrollbar">
+      <SheetContent side="bottom" className="h-[80vh] py-4 gap-0 rounded-t-lg border-0 shadow-none overflow-x-auto scrollbar">
         {selectedStock && (
           <>
             <SheetHeader className="p-0 px-4 mb-4">

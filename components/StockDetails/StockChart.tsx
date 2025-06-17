@@ -30,7 +30,7 @@ interface StockChartProps {
 
 export const StockChart = ({ chartData, isMobile = false }: StockChartProps) => {
   return (
-    <ChartContainer className="max-h-96 w-full" config={chartConfig}>
+    <ChartContainer className="max-h-96 w-full mt-2" config={chartConfig}>
       <AreaChart
         accessibilityLayer
         data={chartData}

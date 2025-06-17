@@ -14,7 +14,7 @@ interface StockMetricsProps {
 export const StockMetrics = ({ selectedStock, chartData }: StockMetricsProps) => {
   return (
     <Card className="p-0 shadow-none border-0 bg-transparent">
-      <CardContent className="flex flex-col lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-x-4 gap-y-1 p-0 lg:max-h-64 overflow-y-auto scrollbar" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
+      <CardContent className="flex flex-col lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-x-4 gap-y-2 p-0 lg:max-h-64 overflow-y-auto scrollbar" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
         <div className="flex itens-center justify-between min-w-48 w-full">
           <p className="text-sm font-light truncate">Current Price</p>
           <p className="font-medium">{parseFloat((selectedStock.preco_atual || 0).toString()).toFixed(2)}</p>
