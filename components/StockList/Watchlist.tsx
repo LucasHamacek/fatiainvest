@@ -1,6 +1,5 @@
 import { StockCard } from "@/components/StockList/StockCard";
 import { StockData } from "@/types/stock.types";
-import { useWatchlist } from "@/context/WatchlistContext";
 
 interface WatchlistProps {
   stocks: StockData[];

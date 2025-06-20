@@ -1,7 +1,7 @@
 // Home.tsx atualizado
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { StockData, } from '../../types/stock.types'
 import { useStocks } from '../../hooks/useStocks'
 import { useStockChart } from '../../hooks/useStockChart'
@@ -51,14 +51,14 @@ export default function Home() {
   }, []);
 
   // Lista de tickers que você quer ocultar
-  const hiddenTickers = [
+  const hiddenTickers = useMemo(() => [
     'AESB3',
     'CIEL3',
     'ENAT3',
     'ODPV3',
     'TRPL3',
     'TRPL4'
-  ]
+  ], []);
 
   // Exemplo de lista de tickers da watchlist (substitua por dados reais do usuário)
   const { watchlist } = useWatchlist();
