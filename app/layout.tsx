@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Layout/Header";
 import HeaderClientWrapper from "@/components/Layout/HeaderClientWrapper";
 import { SearchProvider } from "@/context/SearchContext";
 import { WatchlistProvider } from "@/context/WatchlistContext";

@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
 
@@ -49,7 +49,7 @@ const LoginPage = () => {
           router.push('/home'); // Redireciona para a home após login bem-sucedido
         }, 1000);
       }
-    } catch (error) {
+    } catch {
       showAlert('Erro ao fazer login. Tente novamente.', 'error');
     } finally {
       setIsLoading(false);

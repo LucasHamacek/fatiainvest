@@ -29,11 +29,21 @@ export default function Home() {
   const [consistentStocks,] = useState<Set<string>>(new Set())
 
   // Estado de autenticação
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email: string } | null>(null);
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user && data.user.id && data.user.email) {
+        setUser({ id: data.user.id, email: data.user.email });
+      } else {
+        setUser(null);
+      }
+    });
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      if (session?.user && session.user.id && session.user.email) {
+        setUser({ id: session.user.id, email: session.user.email });
+      } else {
+        setUser(null);
+      }
     });
     return () => {
       listener?.subscription.unsubscribe();
@@ -109,7 +119,7 @@ export default function Home() {
       router.replace("/home", { scroll: false });
     }
     // eslint-disable-next-line
-  }, []);
+  }, [searchParams, searchTerm, setSearchTerm, router]);
 
   // Definir primeira ação quando os dados carregarem ou filtro mudar
   useEffect(() => {
@@ -119,7 +129,7 @@ export default function Home() {
         setSelectedStock(filteredStocks[0])
       }
     }
-  }, [stocks, selectedFilter, consistentStocks])
+  }, [stocks, selectedFilter, consistentStocks, applyFilters, selectedStock]);
 
   // Seleciona automaticamente a primeira ação ao buscar
   useEffect(() => {
@@ -131,7 +141,7 @@ export default function Home() {
         setSelectedStock(null);
       }
     }
-  }, [searchTerm]);
+  }, [searchTerm, applyFilters, stocks]);
 
   const tab = searchParams.get("tab") || "stocks";
   // Determina a lista de ações exibidas atualmente
@@ -142,7 +152,7 @@ export default function Home() {
     if (displayedStocks.length === 0 && selectedStock) {
       setSelectedStock(null);
     }
-  }, [displayedStocks.length]);
+  }, [displayedStocks.length, selectedStock]);
 
   // Função para lidar com o clique no card (desktop vs mobile)
   const handleStockClick = (stock: StockData) => {
