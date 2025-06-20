@@ -1,7 +1,7 @@
 // Home.tsx atualizado
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { StockData, } from '../../types/stock.types'
 import { useStocks } from '../../hooks/useStocks'
 import { useStockChart } from '../../hooks/useStockChart'
@@ -65,7 +65,7 @@ export default function Home() {
   const watchlistStocks = stocks.filter(stock => watchlist.includes(stock.ticker));
 
   // Função para aplicar filtros nas ações
-  const applyFilters = (stocksToFilter: StockData[]): StockData[] => {
+  const applyFilters = useCallback((stocksToFilter: StockData[]): StockData[] => {
     // Oculta ações com preco_atual === 0 e tickers ocultos
     let filteredStocks = stocksToFilter
       .filter(stock => stock.preco_atual !== 0)
@@ -97,6 +97,7 @@ export default function Home() {
         })
 
       case 'consistent':
+        if (!stocksToFilter.length) return [];
         return filteredStocks.filter(stock => {
           if (!stock.chartData || stock.chartData.length < 5) return false;
           const last5 = [...stock.chartData]
@@ -108,7 +109,7 @@ export default function Home() {
       default:
         return filteredStocks
     }
-  }
+  }, [hiddenTickers, searchTerm, selectedFilter]);
 
   // Atualiza o contexto de busca ao montar se vier via query param
   useEffect(() => {

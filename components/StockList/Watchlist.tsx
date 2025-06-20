@@ -1,7 +1,6 @@
 import { StockCard } from "@/components/StockList/StockCard";
 import { StockData } from "@/types/stock.types";
 import { useWatchlist } from "@/context/WatchlistContext";
-import { Trash2 } from "lucide-react"
 
 interface WatchlistProps {
   stocks: StockData[];
@@ -9,7 +8,6 @@ interface WatchlistProps {
 }
 
 export const Watchlist = ({ stocks, onStockClick }: WatchlistProps) => {
-  const { removeFromWatchlist } = useWatchlist();
   if (!stocks.length) {
     return (
       <div className="flex items-center justify-center w-full h-full min-h-[300px] text-gray-500 text-center">
