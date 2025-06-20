@@ -119,7 +119,6 @@ export default function Home() {
       // Limpa o param da URL após aplicar (opcional)
       router.replace("/home", { scroll: false });
     }
-    // eslint-disable-next-line
   }, [searchParams, searchTerm, setSearchTerm, router]);
 
   // Definir primeira ação quando os dados carregarem ou filtro mudar
