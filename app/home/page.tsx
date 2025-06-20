@@ -18,6 +18,14 @@ import { supabase } from "@/lib/supabaseClient";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function Home() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
   const { stocks, loading } = useStocks();
   const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
   const { chartData } = useStockChart(selectedStock);
@@ -176,7 +184,7 @@ export default function Home() {
   }
 
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <>
       <Toaster />
       <div className="flex-1 flex max-h-[calc(100vh-4rem)] overflow-hidden">
         {tab === "watchlist" ? (
@@ -204,6 +212,6 @@ export default function Home() {
           chartData={chartData}
         />
       </div>
-    </Suspense>
+    </>
   )
 }
