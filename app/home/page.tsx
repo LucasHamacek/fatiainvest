@@ -1,7 +1,7 @@
 // Home.tsx atualizado
 "use client"
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, Suspense } from 'react'
 import { StockData, } from '../../types/stock.types'
 import { useStocks } from '../../hooks/useStocks'
 import { useStockChart } from '../../hooks/useStockChart'
@@ -176,7 +176,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <Suspense fallback={<LoadingScreen />}>
       <Toaster />
       <div className="flex-1 flex max-h-[calc(100vh-4rem)] overflow-hidden">
         {tab === "watchlist" ? (
@@ -204,6 +204,6 @@ export default function Home() {
           chartData={chartData}
         />
       </div>
-    </>
+    </Suspense>
   )
 }
