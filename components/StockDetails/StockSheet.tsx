@@ -43,7 +43,10 @@ export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }
                     <Button
                       className="text-yellow-500"
                       variant="secondary"
-                      onClick={() => removeFromWatchlist(selectedStock.ticker)}
+                      onClick={() => {
+                        removeFromWatchlist(selectedStock.ticker);
+                        setSheetOpen(false);
+                      }}
                     >
                       <Star fill="currentColor" />
                     </Button>
