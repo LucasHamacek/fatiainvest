@@ -1,5 +1,5 @@
 // components/StockDetails/StockDetails.tsx
-import { Dot } from "lucide-react"
+import { Dot, Star } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -7,10 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
+import { useWatchlist } from "@/context/WatchlistContext"
+import { Button } from "@/components/ui/button"
 import { StockData, ChartData } from '../../types/stock.types'
 import { StockChart } from './StockChart'
 import { StockMetrics } from './StockMetrics'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface StockDetailsProps {
   selectedStock: StockData | null
@@ -18,7 +20,9 @@ interface StockDetailsProps {
 }
 
 export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) => {
-  if (!selectedStock) return null
+  const { watchlist, addToWatchlist, removeFromWatchlist } = useWatchlist();
+  if (!selectedStock) return null;
+  const isInWatchlist = watchlist.includes(selectedStock.ticker);
 
   return (
     <main className="flex-1 p-4 overflow-auto hidden md:flex md:flex-col">
@@ -37,6 +41,43 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
                   <span>BRL</span>
                 </p>
               </CardDescription>
+            </div>
+            <div>
+              {isInWatchlist ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="text-yellow-500"
+                        variant="secondary"
+                        onClick={() => removeFromWatchlist(selectedStock.ticker)}
+                      >
+                        <Star fill="currentColor" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className="font-medium">
+                      Remove from Watchlist
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="text-gray-500"
+                        variant="secondary"
+                        onClick={() => addToWatchlist(selectedStock.ticker)}
+                      >
+                        <Star fill="currentColor" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className="font-medium">
+                      Add to Watchlist
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
             </div>
           </CardHeader>
 

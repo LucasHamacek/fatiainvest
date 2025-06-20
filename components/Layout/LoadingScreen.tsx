@@ -12,7 +12,7 @@ export const LoadingScreen = () => {
         />
       </div>
       <div className="text-base font-medium text-gray-500">
-        Carregando dados...
+        Carregando...
       </div>
     </div>
   )

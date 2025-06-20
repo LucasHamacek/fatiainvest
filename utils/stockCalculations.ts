@@ -26,7 +26,7 @@ export const getBackgroundColor = (stock: StockData): string => {
   if (variation > 10 || variation < -10) {
     return 'bg-red-400'
   } else if (variation > 5 || variation < -5) {
-    return 'bg-blue-400'
+    return 'bg-green-400'
   } else {
     return 'bg-green-400'
   }

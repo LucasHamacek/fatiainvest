@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/Layout/Header";
+import HeaderClientWrapper from "@/components/Layout/HeaderClientWrapper";
+import { SearchProvider } from "@/context/SearchContext";
+import { WatchlistProvider } from "@/context/WatchlistContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 const roboto = Roboto({
-variable: "--font-roboto",
-subsets: ["latin"],
+  variable: "--font-roboto",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +36,12 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SearchProvider>
+          <WatchlistProvider>
+            <HeaderClientWrapper />
+            {children}
+          </WatchlistProvider>
+        </SearchProvider>
       </body>
     </html>
   );

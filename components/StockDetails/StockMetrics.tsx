@@ -20,7 +20,7 @@ export const StockMetrics = ({ selectedStock, chartData }: StockMetricsProps) =>
           <p className="font-medium">{parseFloat((selectedStock.preco_atual || 0).toString()).toFixed(2)}</p>
         </div>
         <div className="flex itens-center justify-between min-w-48 w-full">
-          <p className="text-sm font-light truncate">Max. Value</p>
+          <p className="text-sm font-light truncate">Max. Value (Bazin)</p>
           <p className="font-medium">{parseFloat((selectedStock.preco_max_calc || 0).toString()).toFixed(2)}</p>
         </div>
         <div className="flex itens-center justify-between min-w-48 w-full">

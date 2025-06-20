@@ -8,6 +8,7 @@ export interface StockData {
   dividendo_calc: number
   preco_atual: number
   data_preco: string
+  chartData?: { ano: number; dividendo: number }[];
 }
 
 export interface DividendData {

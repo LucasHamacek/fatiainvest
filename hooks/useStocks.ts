@@ -1,4 +1,3 @@
-// hooks/useStocks.ts
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StockData } from '../types/stock.types'
@@ -20,8 +19,17 @@ export const useStocks = () => {
 
         if (error) throw error
 
-        const stocksData = (data || []) as StockData[]
-        setStocks(stocksData)
+        // Para cada ação, busca os dividendos anuais
+        const stocksWithDividends = await Promise.all(
+          (data || []).map(async (stock: any) => {
+            const { data: chartData } = await supabase.rpc('dividendos_por_ano', {
+              ticker_param: stock.ticker,
+            });
+            return { ...stock, chartData: chartData || [] };
+          })
+        );
+
+        setStocks(stocksWithDividends)
 
         // Finalizar carregamento
         setTimeout(() => setProgress(100), 100)
