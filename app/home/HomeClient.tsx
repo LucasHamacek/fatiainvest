@@ -26,6 +26,7 @@ export default function HomeClient() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none');
   const [consistentStocks,] = useState<Set<string>>(new Set());
+  const [searchApplied, setSearchApplied] = useState(false);
 
   // Estado de autenticação
   const [user, setUser] = useState<{ id: string; email: string } | null>(null);
@@ -112,23 +113,29 @@ export default function HomeClient() {
 
   // Atualiza o contexto de busca ao montar se vier via query param
   useEffect(() => {
+    if (searchApplied) return;
     const searchFromUrl = searchParams.get("search") || "";
     if (searchFromUrl && searchFromUrl !== searchTerm) {
       setSearchTerm(searchFromUrl);
-      // Limpa o param da URL após aplicar (opcional)
       router.replace("/home", { scroll: false });
+      setSearchApplied(true);
     }
-  }, [searchParams, searchTerm, setSearchTerm, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, router, searchApplied]);
 
   // Definir primeira ação quando os dados carregarem ou filtro mudar
   useEffect(() => {
     if (stocks.length > 0) {
       const filteredStocks = applyFilters(stocks);
-      if (filteredStocks.length > 0 && (!selectedStock || selectedFilter !== 'none')) {
+      if (
+        filteredStocks.length > 0 &&
+        (!selectedStock || selectedStock.ticker !== filteredStocks[0].ticker)
+      ) {
         setSelectedStock(filteredStocks[0]);
       }
     }
-  }, [stocks, selectedFilter, consistentStocks, applyFilters, selectedStock]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stocks, selectedFilter, consistentStocks, applyFilters]);
 
   // Seleciona automaticamente a primeira ação ao buscar
   useEffect(() => {

@@ -1,3 +1,5 @@
+"use client";
+
 import { StockCard } from "@/components/StockList/StockCard";
 import { StockData } from "@/types/stock.types";
 
@@ -9,7 +11,7 @@ interface WatchlistProps {
 export const Watchlist = ({ stocks, onStockClick }: WatchlistProps) => {
   if (!stocks.length) {
     return (
-      <div className="flex items-center justify-center w-full h-full min-h-[300px] text-gray-500 text-center">
+      <div className="flex items-center justify-center w-full px-4 h-full min-h-[300px] text-gray-500 text-center">
         Your watchlist is empty. Add some stocks to track them here.
       </div>
     );
@@ -29,4 +31,4 @@ export const Watchlist = ({ stocks, onStockClick }: WatchlistProps) => {
       </div>
     </div>
   );
-}
+};
