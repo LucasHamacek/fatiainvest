@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 
 interface WatchlistContextType {
@@ -19,36 +20,23 @@ const WatchlistContext = createContext<WatchlistContextType>({
 });
 
 export function WatchlistProvider({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
   const [watchlist, setWatchlist] = useState<string[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
-
-  // Carrega o usuário autenticado do Supabase
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id || null);
-    });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id || null);
-    });
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
 
   // Carrega a watchlist do Supabase ao logar
   useEffect(() => {
-    if (!userId) return;
+    if (!user?.id) return;
     (async () => {
       const { data, error } = await supabase
         .from("watchlists")
         .select("ticker")
-        .eq("user_id", userId);
+        .eq("user_id", user.id);
       if (!error && data) {
         setWatchlist(data.map((row: any) => row.ticker));
       }
     })();
-  }, [userId]);
+  }, [user?.id]);
 
   const showLoginToast = () => {
     toast("Login to add or remove stocks from your favorites.", {
@@ -61,22 +49,22 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addToWatchlist = async (ticker: string) => {
-    if (!userId) {
+    if (!user?.id) {
       showLoginToast();
       return;
     }
     setWatchlist((prev) => (prev.includes(ticker) ? prev : [...prev, ticker]));
-    await supabase.from("watchlists").upsert({ user_id: userId, ticker });
+    await supabase.from("watchlists").upsert({ user_id: user.id, ticker });
     toast.success("Stock added to favorites!");
   };
 
   const removeFromWatchlist = async (ticker: string) => {
-    if (!userId) {
+    if (!user?.id) {
       showLoginToast();
       return;
     }
     setWatchlist((prev) => prev.filter((t) => t !== ticker));
-    await supabase.from("watchlists").delete().eq("user_id", userId).eq("ticker", ticker);
+    await supabase.from("watchlists").delete().eq("user_id", user.id).eq("ticker", ticker);
     toast.success("Stock removed from favorites!");
   };
 

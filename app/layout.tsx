@@ -6,6 +6,7 @@ import { SearchProvider } from "@/context/SearchContext";
 import { WatchlistProvider } from "@/context/WatchlistContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import { StocksProvider } from "@/context/StocksContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,14 +55,16 @@ export default function RootLayout({
       </head>
       <body className={`${roboto.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <StocksProvider>
-            <SearchProvider>
-              <WatchlistProvider>
-                <HeaderClientWrapper />
-                {children}
-              </WatchlistProvider>
-            </SearchProvider>
-          </StocksProvider>
+          <AuthProvider>
+            <StocksProvider>
+              <SearchProvider>
+                <WatchlistProvider>
+                  <HeaderClientWrapper />
+                  {children}
+                </WatchlistProvider>
+              </SearchProvider>
+            </StocksProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

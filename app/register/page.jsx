@@ -69,7 +69,7 @@ const RegisterPage = () => {
     try {
       // Simulação de chamada de API
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // Aqui você faria a chamada real para sua API
       const response = await fetch('/api/auth/register/', {
         method: 'POST',
@@ -98,12 +98,12 @@ const RegisterPage = () => {
         setTimeout(() => {
           router.push('/login');
         }, 2000);
-        
+
       } else {
         const errorData = await response.json();
         showAlert(errorData.message || 'Error creating account.', 'error');
       }
-      
+
     } catch (error) {
       showAlert('Error creating account. Please try again.', 'error');
     } finally {
@@ -118,104 +118,106 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-none border-none">
-        <CardHeader className="space-y-1">
+    <div className="flex-1 h-[calc(100vh-4rem)]">
+      <div className="flex items-center justify-center h-full">
+        <Card className="w-full max-w-md shadow-none border-none">
+          <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold">Join the Fatia Invest</CardTitle>
-          <CardDescription>
-            Fill in the details below to create your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {alert.show && (
-            <Alert className={alert.type === 'error' ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50'}>
-              <AlertDescription className={alert.type === 'error' ? 'text-red-700' : 'text-green-700'}>
-                {alert.message}
-              </AlertDescription>
-            </Alert>
-          )}
-          
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <div className="relative">
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Your full name"
-                  value={registerData.name}
-                  onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
-                  onKeyPress={handleKeyPress}
-                  disabled={isLoading}
-                />
+            <CardDescription>
+              Fill in the details below to create your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {alert.show && (
+              <Alert className={alert.type === 'error' ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50'}>
+                <AlertDescription className={alert.type === 'error' ? 'text-red-700' : 'text-green-700'}>
+                  {alert.message}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <div className="relative">
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Your full name"
+                    value={registerData.name}
+                    onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+                    onKeyPress={handleKeyPress}
+                    disabled={isLoading}
+                  />
+                </div>
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={registerData.email}
+                    onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                    onKeyPress={handleKeyPress}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Minimum 8 characters"
+                    value={registerData.password}
+                    onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                    onKeyPress={handleKeyPress}
+                    disabled={isLoading}
+                  />
+                </div>
+                <p className="text-xs text-gray-500">
+                  8+ characters, uppercase, lowercase and number
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <div className="relative">
+                  <Input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm your password"
+                    value={registerData.confirmPassword}
+                    onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
+                    onKeyPress={handleKeyPress}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+
+              <Button onClick={handleRegister} className="w-full" disabled={isLoading}>
+                {isLoading ? 'Creating account...' : 'Create Account'}
+              </Button>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={registerData.email}
-                  onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
-                  onKeyPress={handleKeyPress}
-                  disabled={isLoading}
-                />
-              </div>
+            <div className="text-center text-sm text-gray-600">
+              Already have an account?{' '}
+              <Button
+                variant={"link"}
+                onClick={() => router.push('/login')}
+                disabled={isLoading}
+              >
+                Login
+              </Button>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Minimum 8 characters"
-                  value={registerData.password}
-                  onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
-                  onKeyPress={handleKeyPress}
-                  disabled={isLoading}
-                />
-              </div>
-              <p className="text-xs text-gray-500">
-                8+ characters, uppercase, lowercase and number
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
-                  value={registerData.confirmPassword}
-                  onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
-                  onKeyPress={handleKeyPress}
-                  disabled={isLoading}
-                />
-              </div>
-            </div>
-
-            <Button onClick={handleRegister} className="w-full" disabled={isLoading}>
-              {isLoading ? 'Creating account...' : 'Create Account'}
-            </Button>
-          </div>
-
-          <div className="text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Button
-            variant={"link"}
-              onClick={() => router.push('/login')}
-              disabled={isLoading}
-            >
-              Login
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

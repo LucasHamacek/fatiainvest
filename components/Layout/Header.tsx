@@ -1,44 +1,32 @@
 // components/Layout/Header.tsx
-import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { useSearch } from "@/context/SearchContext";
 import { SearchInput } from '../StockList/SearchInput'
 import { Button } from "@/components/ui/button";
 import { useRouter, usePathname } from "next/navigation";
-import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem } from "@/components/ui/menubar";
+import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator } from "@/components/ui/menubar";
 import { Info, Star, Settings, LogOut, LogIn, Menu, ChartNoAxesCombined } from "lucide-react";
 import { useStocksContext } from "@/context/StocksContext";
+import { link } from "fs";
 
 export const Header = () => {
   const { searchTerm, setSearchTerm } = useSearch();
   const { stocks } = useStocksContext();
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    // Verifica o usuário ao montar
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
-
-    // Escuta mudanças de autenticação
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
-
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setUser(null);
     window.location.href = "/login";
   };
 
   // Função para lidar com a busca e redirecionar se necessário
   const handleSearch = (term: string) => {
+    if (term === searchTerm) return;
     setSearchTerm(term);
     // Sempre redireciona para /home?search=term, mesmo se estiver na watchlist ou outra rota
     if (!pathname.startsWith("/home")) {
@@ -51,6 +39,9 @@ export const Header = () => {
       router.replace(`/home?${params.toString()}`);
     }
   };
+
+  // Memoiza a lista de stocks para evitar re-renderizações desnecessárias
+  const memoizedStocks = useMemo(() => stocks.map(s => ({ ticker: s.ticker, companhia: s.companhia })), [stocks]);
 
   return (
     <div className='flex items-center gap-2 p-4 md:border-b border-gray-200 dark:border-zinc-700 h-16'>
@@ -65,8 +56,8 @@ export const Header = () => {
       <div className='w-full'>
         <SearchInput
           searchTerm={searchTerm}
-          setSearchTerm={handleSearch}
-          stocks={stocks.map(s => ({ ticker: s.ticker, companhia: s.companhia }))}
+          setSearchTerm={useCallback(handleSearch, [pathname, router, setSearchTerm])}
+          stocks={memoizedStocks}
         />
       </div>
       {/* Botão About visível para todos em desktop */}
@@ -86,22 +77,24 @@ export const Header = () => {
       <div className="md:hidden">
         <Menubar>
           <MenubarMenu>
-            <MenubarTrigger className="hover:bg-transparent active:bg-transparent focus:bg-transparent">
+            <MenubarTrigger className="bg-transparent">
               <Menu className="size-6" />
             </MenubarTrigger>
             <MenubarContent align="end">
-              <MenubarItem onClick={() => router.push("/home")}> <ChartNoAxesCombined className="inline mr-2 size-4" />Stocks</MenubarItem>
-              <MenubarItem onClick={() => router.push("/about")}> <Info className="inline mr-2 size-4" />About</MenubarItem>
+              <MenubarItem className="" onClick={() => router.push("/home")}> <ChartNoAxesCombined className="inline justify-center mr-2 size-4 text-gray-800" />Stocks</MenubarItem>
+              <MenubarItem className="" onClick={() => router.push("/about")}> <Info className="inline justify-center mr-2 size-4 text-gray-800" />About</MenubarItem>
               {user ? (
                 <>
-                  <MenubarItem onClick={() => router.push("/home?tab=watchlist")}> <Star className="inline mr-2 size-4" />Favorites</MenubarItem>
-                  <MenubarItem onClick={() => router.push("/settings")}> <Settings className="inline mr-2 size-4" />Settings</MenubarItem>
-                  <MenubarItem onClick={handleLogout}> <LogOut className="inline mr-2 size-4" />Logout</MenubarItem>
+                  <MenubarItem className="" onClick={() => router.push("/home?tab=watchlist")}> <Star className="inline justify-center mr-2 size-4 text-gray-800" />Favorites</MenubarItem>
+                  <MenubarItem className="" onClick={() => router.push("/settings")}> <Settings className="inline justify-center mr-2 size-4 text-gray-800" />Settings</MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem className="focus:bg-transparent" onClick={handleLogout}> <Button className="w-full" variant={"outline"}>Logout</Button></MenubarItem>
                 </>
               ) : (
                 <>
-                  <MenubarItem onClick={() => window.location.href = '/login'}> <LogIn className="inline mr-2 size-4" />Login</MenubarItem>
-                  <MenubarItem onClick={() => window.location.href = '/register'}> <LogIn className="inline mr-2 size-4" />Register</MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem className="focus:bg-transparent" onClick={() => window.location.href = '/login'}> <Button className="w-full " variant={"outline"}>Login</Button></MenubarItem>
+                  <div className="text-sm text-gray-500 ml-2"> Not registered yet? <Button className="" variant="link" onClick={() => window.location.href = '/register'}>Register</Button></div>
                 </>
               )}
             </MenubarContent>

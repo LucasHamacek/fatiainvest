@@ -1,6 +1,6 @@
 // hooks/useStockChart.ts
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../lib/supabaseClient'
 import { StockData, DividendData, ChartData } from '../types/stock.types'
 
 export const useStockChart = (selectedStock: StockData | null) => {

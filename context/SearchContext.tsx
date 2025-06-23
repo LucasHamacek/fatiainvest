@@ -13,8 +13,12 @@ const SearchContext = createContext<SearchContextType>({
 
 export function SearchProvider({ children }: { children: React.ReactNode }) {
   const [searchTerm, setSearchTerm] = useState("");
+  // Log para depuração
+  const debugSetSearchTerm = (term: string) => {
+    setSearchTerm(term);
+  };
   return (
-    <SearchContext.Provider value={{ searchTerm, setSearchTerm }}>
+    <SearchContext.Provider value={{ searchTerm, setSearchTerm: debugSetSearchTerm }}>
       {children}
     </SearchContext.Provider>
   );

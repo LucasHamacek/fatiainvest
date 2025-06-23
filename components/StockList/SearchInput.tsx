@@ -59,6 +59,18 @@ export const SearchInput = ({ searchTerm, setSearchTerm, stocks = [] }: SearchIn
     setShowSuggestions(false)
   }
 
+  // Sincroniza inputValue com searchTerm externo
+  useEffect(() => {
+    setInputValue(searchTerm);
+  }, [searchTerm]);
+
+  // Quando o inputValue ficar vazio manualmente, limpa o searchTerm global
+  useEffect(() => {
+    if (inputValue === "" && searchTerm !== "") {
+      setSearchTerm("");
+    }
+  }, [inputValue, searchTerm, setSearchTerm]);
+
   return (
     <div className="relative" ref={containerRef}>
       <form onSubmit={handleSubmit} autoComplete="off">
@@ -75,9 +87,9 @@ export const SearchInput = ({ searchTerm, setSearchTerm, stocks = [] }: SearchIn
             type="button"
             className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-gray-700"
             onClick={() => {
-              setInputValue("")
-              setSearchTerm("")
-              setShowSuggestions(false)
+              setInputValue("");
+              setSearchTerm("");
+              setShowSuggestions(false);
             }}
             aria-label="Limpar busca"
           >

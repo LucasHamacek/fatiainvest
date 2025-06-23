@@ -15,9 +15,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useWatchlist } from "@/context/WatchlistContext";
 import { supabase } from "@/lib/supabaseClient";
 import { Toaster } from "@/components/ui/sonner";
+import { useAuth } from "@/context/AuthContext";
 
 export default function HomeClient() {
   const { stocks, loading } = useStocksContext();
+  const { user } = useAuth();
   const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
   const { chartData } = useStockChart(selectedStock);
   const searchParams = useSearchParams();
@@ -29,40 +31,11 @@ export default function HomeClient() {
   const [searchApplied, setSearchApplied] = useState(false);
   const [investorProfile, setInvestorProfile] = useState<string>("agressivo");
 
-  // Estado de autenticação
-  const [user, setUser] = useState<{ id: string; email: string } | null>(null);
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user && data.user.id && data.user.email) {
-        setUser({ id: data.user.id, email: data.user.email });
-      } else {
-        setUser(null);
-      }
-    });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user && session.user.id && session.user.email) {
-        setUser({ id: session.user.id, email: session.user.email });
-      } else {
-        setUser(null);
-      }
-    });
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
-
-  // Carrega perfil do usuário autenticado
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setInvestorProfile(data.user?.user_metadata?.investorProfile || "agressivo");
-    });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setInvestorProfile(session?.user?.user_metadata?.investorProfile || "agressivo");
-    });
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
+    if (user) {
+      setInvestorProfile(user.user_metadata?.investorProfile || "agressivo");
+    }
+  }, [user]);
 
   // Lista de tickers que você quer ocultar
   const hiddenTickers = useMemo(() => [
@@ -76,6 +49,8 @@ export default function HomeClient() {
 
   // Função para aplicar filtros nas ações
   const applyFilters = useCallback((stocksToFilter: StockData[]): StockData[] => {
+    // DEBUG: Veja o valor do searchTerm e o tamanho da lista original
+    console.log('[applyFilters] searchTerm:', searchTerm, '| stocksToFilter:', stocksToFilter.length);
     // Oculta ações com preco_atual === 0 e tickers ocultos
     let filteredStocks = stocksToFilter
       .filter(stock => stock.preco_atual !== 0)
@@ -112,25 +87,28 @@ export default function HomeClient() {
           return percentageFromMax >= -10 && percentageFromMax <= 10;
         });
 
-      case 'consistent':
-        if (!stocksToFilter.length) return [];
-        return filteredStocks.filter(stock => {
-          if (!stock.chartData || stock.chartData.length < 5) return false;
-          const last5 = [...stock.chartData]
-            .sort((a, b) => Number(b.ano) - Number(a.ano))
-            .slice(0, 5);
-          return last5.every(d => Number(d.dividendo) > 0);
-        });
-
       default:
         return filteredStocks;
     }
   }, [hiddenTickers, searchTerm, selectedFilter, investorProfile]);
 
+  // Função para aplicar filtros na watchlist (sem searchTerm)
+  const filterWatchlistStocks = useCallback((stocksToFilter: StockData[]): StockData[] => {
+    // Oculta ações com preco_atual === 0 e tickers ocultos
+    let filteredStocks = stocksToFilter
+      .filter(stock => stock.preco_atual !== 0)
+      .filter(stock => !hiddenTickers.includes(stock.ticker));
+    // Atualiza preco_max_calc conforme perfil
+    return filteredStocks.map(stock => ({
+      ...stock,
+      preco_max_calc: investorProfile === "conservador" ? stock.preco_max_conservador : stock.preco_max_agressivo
+    }));
+  }, [hiddenTickers, investorProfile]);
+
   // Exemplo de lista de tickers da watchlist (substitua por dados reais do usuário)
   const { watchlist } = useWatchlist();
   // Corrigido: aplica filtros e perfil de investidor na watchlist
-  const watchlistStocks = applyFilters(stocks.filter(stock => watchlist.includes(stock.ticker)));
+  const watchlistStocks = filterWatchlistStocks(stocks.filter(stock => watchlist.includes(stock.ticker)));
 
   // Atualiza o contexto de busca ao montar se vier via query param
   useEffect(() => {
@@ -191,14 +169,13 @@ export default function HomeClient() {
     }
   }, [displayedStocks.length, selectedStock]);
 
-  // Função para lidar com o clique no card (desktop vs mobile)
-  const handleStockClick = (stock: StockData) => {
+  // Memoiza a função de clique para evitar re-renderizações desnecessárias em StockCard/Watchlist
+  const handleStockClick = useCallback((stock: StockData) => {
     setSelectedStock(stock);
-    // No mobile, abrir a sheet
     if (window.innerWidth < 768) {
       setSheetOpen(true);
     }
-  };
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -207,7 +184,7 @@ export default function HomeClient() {
   if (tab === "watchlist" && !user) {
     return (
       <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">
-        Faça login para acessar sua Watchlist.
+        Login required to manage favorites.
       </div>
     );
   }

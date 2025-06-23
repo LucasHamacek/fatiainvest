@@ -18,12 +18,13 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { toast } from "sonner"
 import type { User } from "@supabase/supabase-js";
+import { useAuth } from "@/context/AuthContext";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function SettingsPage() {
     const { setTheme, theme } = useTheme();
-    const [loading, setLoading] = useState(true)
+    const { user, loading } = useAuth();
     const [saving, setSaving] = useState(false)
-    const [user, setUser] = useState<User | null>(null)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -33,15 +34,13 @@ export default function SettingsPage() {
     const [profileSaving, setProfileSaving] = useState(false)
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
-            setUser(data.user)
-            setName(data.user?.user_metadata?.name || "")
-            setEmail(data.user?.email || "")
-            setInvestorProfile(data.user?.user_metadata?.investorProfile || "agressivo")
-            setLoading(false)
-        })
+        if (user) {
+            setName(user.user_metadata?.name || "")
+            setEmail(user.email || "")
+            setInvestorProfile(user.user_metadata?.investorProfile || "agressivo")
+        }
         setMounted(true)
-    }, [])
+    }, [user])
 
     // Validação de senha igual ao cadastro
     const validatePassword = (password: string) => {
@@ -98,18 +97,24 @@ export default function SettingsPage() {
         }
     }
 
-    // Salva automaticamente ao trocar o perfil de investidor
-    useEffect(() => {
+    // Salva automaticamente ao trocar o perfil de investidor, agora com debounce
+    const debouncedUpdateProfile = useDebouncedCallback((profile: string) => {
         if (!user) return;
-        if (investorProfile !== user?.user_metadata?.investorProfile) {
+        if (profile !== user?.user_metadata?.investorProfile) {
             setProfileSaving(true)
-            supabase.auth.updateUser({ data: { investorProfile } })
+            supabase.auth.updateUser({ data: { investorProfile: profile } })
                 .then(({ error }) => {
                     setProfileSaving(false)
                     if (error) toast.error("Erro ao salvar perfil de investidor: " + error.message)
                     else toast.success("Perfil de investidor atualizado!")
                 });
         }
+    }, 800); // 800ms debounce
+
+    useEffect(() => {
+        if (!user) return;
+        debouncedUpdateProfile(investorProfile);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [investorProfile, user]);
 
     return (

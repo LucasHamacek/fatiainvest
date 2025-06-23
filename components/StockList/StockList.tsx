@@ -17,12 +17,7 @@ export const StockList = ({
   selectedFilter,
   onFilterChange
 }: StockListProps) => {
-  // Aplicar filtro de pesquisa nas ações já filtradas
-  const safeSearchTerm = (searchTerm ?? '').toLowerCase();
-  const filteredStocks = stocks.filter(stock =>
-    (stock.ticker ?? '').toLowerCase().includes(safeSearchTerm) ||
-    (stock.companhia ?? '').toLowerCase().includes(safeSearchTerm)
-  )
+  const filteredStocks = stocks;
 
   return (
     <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 px-4 py-2 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
@@ -47,8 +42,8 @@ export const StockList = ({
 
       {filteredStocks.length === 0 && (
         <div className="text-center text-gray-500 mt-8">
-          <p>Nenhuma ação encontrada</p>
-          <p className="text-sm">Tente ajustar os filtros ou termo de busca</p>
+          <p >Stocks not found</p>
+          <p >Try adjusting the filters or search term</p>
         </div>
       )}
     </div>
