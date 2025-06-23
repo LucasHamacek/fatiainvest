@@ -6,14 +6,13 @@ import { SearchInput } from '../StockList/SearchInput'
 import { Button } from "@/components/ui/button";
 import { useRouter, usePathname } from "next/navigation";
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator } from "@/components/ui/menubar";
-import { Info, Star, Settings, LogOut, LogIn, Menu, ChartNoAxesCombined } from "lucide-react";
+import { Info, Star, Settings, Menu, ChartNoAxesCombined } from "lucide-react";
 import { useStocksContext } from "@/context/StocksContext";
-import { link } from "fs";
 
 export const Header = () => {
   const { searchTerm, setSearchTerm } = useSearch();
   const { stocks } = useStocksContext();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 

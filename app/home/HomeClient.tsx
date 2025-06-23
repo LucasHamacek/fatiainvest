@@ -200,7 +200,6 @@ export default function HomeClient() {
         ) : (
           <StockList
             stocks={applyFilters(stocks)}
-            searchTerm={searchTerm}
             onStockClick={handleStockClick}
             selectedFilter={selectedFilter}
             onFilterChange={setSelectedFilter}
