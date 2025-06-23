@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+
 
 interface WatchlistContextType {
   watchlist: string[];
@@ -14,8 +14,8 @@ interface WatchlistContextType {
 
 const WatchlistContext = createContext<WatchlistContextType>({
   watchlist: [],
-  addToWatchlist: () => {},
-  removeFromWatchlist: () => {},
+  addToWatchlist: () => { },
+  removeFromWatchlist: () => { },
 });
 
 export function WatchlistProvider({ children }: { children: React.ReactNode }) {
@@ -51,7 +51,13 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
   }, [userId]);
 
   const showLoginToast = () => {
-    toast.error("Login to add or remove stocks from your watchlist.");
+    toast("Login to add or remove stocks from your favorites.", {
+      action: {
+        label: 'Login',
+        onClick: () => window.location.href = "/login",
+      }
+    });
+
   };
 
   const addToWatchlist = async (ticker: string) => {
@@ -61,7 +67,7 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
     }
     setWatchlist((prev) => (prev.includes(ticker) ? prev : [...prev, ticker]));
     await supabase.from("watchlists").upsert({ user_id: userId, ticker });
-    toast.success("Stock added to watchlist!");
+    toast.success("Stock added to favorites!");
   };
 
   const removeFromWatchlist = async (ticker: string) => {
@@ -71,7 +77,7 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
     }
     setWatchlist((prev) => prev.filter((t) => t !== ticker));
     await supabase.from("watchlists").delete().eq("user_id", userId).eq("ticker", ticker);
-    toast.success("Stock removed from watchlist!");
+    toast.success("Stock removed from favorites!");
   };
 
   return (

@@ -25,8 +25,8 @@ export const FilterSelect = ({ selectedFilter, onFilterChange }: FilterSelectPro
   return (
     <div className="mb-2">
       <Select value={selectedFilter} onValueChange={onFilterChange}>
-        <SelectTrigger className="text-[#007AFF] text-lg font-medium p-0 border-0 focus-visible:ring-0 shadow-none">
-          <SelectValue placeholder="Filtrar ações" />
+        <SelectTrigger className="text-[#007AFF] text-lg font-medium p-0 border-0 focus-visible:ring-0 shadow-none bg-transparent dark:bg-transparent hover:bg-transparent hover:dark:bg-transparent">
+          <SelectValue placeholder="Filter stocks" />
         </SelectTrigger>
         <SelectContent>
           {filterOptions.map((option) => (

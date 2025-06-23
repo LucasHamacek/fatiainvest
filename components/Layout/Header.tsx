@@ -6,9 +6,13 @@ import { useSearch } from "@/context/SearchContext";
 import { SearchInput } from '../StockList/SearchInput'
 import { Button } from "@/components/ui/button";
 import { useRouter, usePathname } from "next/navigation";
+import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem } from "@/components/ui/menubar";
+import { Info, Star, Settings, LogOut, LogIn, Menu, ChartNoAxesCombined } from "lucide-react";
+import { useStocksContext } from "@/context/StocksContext";
 
 export const Header = () => {
   const { searchTerm, setSearchTerm } = useSearch();
+  const { stocks } = useStocksContext();
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -49,7 +53,7 @@ export const Header = () => {
   };
 
   return (
-    <div className='flex items-center gap-2 p-4 md:border-b border-gray-200 h-16'>
+    <div className='flex items-center gap-2 p-4 md:border-b border-gray-200 dark:border-zinc-700 h-16'>
       <a href="/home">
         <svg className="size-6" viewBox="0 0 23 35" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M11.3333 23.1666C11.3333 24.6549 11.0402 26.1287 10.4706 27.5037C9.90109 28.8787 9.06629 30.1281 8.01389 31.1805C6.96149 32.2329 5.71211 33.0677 4.33708 33.6373C2.96206 34.2068 1.48832 34.5 0 34.5L4.95396e-07 23.1666H11.3333Z" fill="#74B3FB" />
@@ -59,30 +63,90 @@ export const Header = () => {
         </svg>
       </a>
       <div className='w-full'>
-        <SearchInput searchTerm={searchTerm} setSearchTerm={handleSearch} />
+        <SearchInput
+          searchTerm={searchTerm}
+          setSearchTerm={handleSearch}
+          stocks={stocks.map(s => ({ ticker: s.ticker, companhia: s.companhia }))}
+        />
+      </div>
+      {/* Botão About visível para todos em desktop */}
+      <button
+        className="ml-2 text-sm font-medium text-gray-700 hover:text-gray-900 hidden md:inline-block"
+        onClick={() => router.push("/home")}
+      >
+        Stocks
+      </button>
+      <button
+        className="ml-2 text-sm font-medium text-gray-700 hover:text-gray-900 hidden md:inline-block"
+        onClick={() => router.push("/about")}
+      >
+        About
+      </button>
+      {/* Dropdown para mobile, visível SEMPRE */}
+      <div className="md:hidden">
+        <Menubar>
+          <MenubarMenu>
+            <MenubarTrigger className="hover:bg-transparent active:bg-transparent focus:bg-transparent">
+              <Menu className="size-6" />
+            </MenubarTrigger>
+            <MenubarContent align="end">
+              <MenubarItem onClick={() => router.push("/home")}> <ChartNoAxesCombined className="inline mr-2 size-4" />Stocks</MenubarItem>
+              <MenubarItem onClick={() => router.push("/about")}> <Info className="inline mr-2 size-4" />About</MenubarItem>
+              {user ? (
+                <>
+                  <MenubarItem onClick={() => router.push("/home?tab=watchlist")}> <Star className="inline mr-2 size-4" />Favorites</MenubarItem>
+                  <MenubarItem onClick={() => router.push("/settings")}> <Settings className="inline mr-2 size-4" />Settings</MenubarItem>
+                  <MenubarItem onClick={handleLogout}> <LogOut className="inline mr-2 size-4" />Logout</MenubarItem>
+                </>
+              ) : (
+                <>
+                  <MenubarItem onClick={() => window.location.href = '/login'}> <LogIn className="inline mr-2 size-4" />Login</MenubarItem>
+                  <MenubarItem onClick={() => window.location.href = '/register'}> <LogIn className="inline mr-2 size-4" />Register</MenubarItem>
+                </>
+              )}
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
       </div>
       {user ? (
         <>
-          <button
-            className="ml-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-            onClick={() => router.push("/home?tab=watchlist")}
-          >
-            Watchlist
-          </button>
-          <Button className='ml-2'
-            variant="outline"
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
+          {/* Botões para desktop */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              className="ml-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => router.push("/home?tab=watchlist")}
+            >
+              Favorites
+            </button>
+            <button
+              className="ml-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => router.push("/settings")}
+            >
+              Settings
+            </button>
+            <Button className='ml-2'
+              variant="outline"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </div>
         </>
       ) : (
-        <Button className='ml-2'
-          variant="outline"
-          onClick={() => window.location.href = '/login'}
-        >
-          Login
-        </Button>
+        <>
+          <Button className='ml-2 hidden md:inline-block'
+            variant="outline"
+            onClick={() => window.location.href = '/login'}
+          >
+            Login
+          </Button>
+          <Button className='ml-2 hidden md:inline-block'
+            variant="outline"
+            onClick={() => window.location.href = '/register'}
+          >
+            Register
+          </Button>
+        </>
       )}
     </div>
   )

@@ -4,6 +4,8 @@ import "./globals.css";
 import HeaderClientWrapper from "@/components/Layout/HeaderClientWrapper";
 import { SearchProvider } from "@/context/SearchContext";
 import { WatchlistProvider } from "@/context/WatchlistContext";
+import { ThemeProvider } from "@/components/theme-provider";
+import { StocksProvider } from "@/context/StocksContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,16 +33,36 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${roboto.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SearchProvider>
-          <WatchlistProvider>
-            <HeaderClientWrapper />
-            {children}
-          </WatchlistProvider>
-        </SearchProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className={`${roboto.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <StocksProvider>
+            <SearchProvider>
+              <WatchlistProvider>
+                <HeaderClientWrapper />
+                {children}
+              </WatchlistProvider>
+            </SearchProvider>
+          </StocksProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

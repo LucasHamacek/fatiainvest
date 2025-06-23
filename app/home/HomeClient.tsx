@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { StockData } from '../../types/stock.types';
-import { useStocks } from '../../hooks/useStocks';
+import { useStocksContext } from "@/context/StocksContext";
 import { useStockChart } from '../../hooks/useStockChart';
 import { FilterOption } from '../../components/StockList/FilterSelect';
 import { LoadingScreen } from '../../components/Layout/LoadingScreen';
@@ -17,7 +17,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function HomeClient() {
-  const { stocks, loading } = useStocks();
+  const { stocks, loading } = useStocksContext();
   const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
   const { chartData } = useStockChart(selectedStock);
   const searchParams = useSearchParams();
@@ -27,6 +27,7 @@ export default function HomeClient() {
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none');
   const [consistentStocks,] = useState<Set<string>>(new Set());
   const [searchApplied, setSearchApplied] = useState(false);
+  const [investorProfile, setInvestorProfile] = useState<string>("agressivo");
 
   // Estado de autenticação
   const [user, setUser] = useState<{ id: string; email: string } | null>(null);
@@ -44,6 +45,19 @@ export default function HomeClient() {
       } else {
         setUser(null);
       }
+    });
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  // Carrega perfil do usuário autenticado
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setInvestorProfile(data.user?.user_metadata?.investorProfile || "agressivo");
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setInvestorProfile(session?.user?.user_metadata?.investorProfile || "agressivo");
     });
     return () => {
       listener?.subscription.unsubscribe();
@@ -79,6 +93,12 @@ export default function HomeClient() {
       );
     }
 
+    // Atualiza preco_max_calc conforme perfil
+    filteredStocks = filteredStocks.map(stock => ({
+      ...stock,
+      preco_max_calc: investorProfile === "conservador" ? stock.preco_max_conservador : stock.preco_max_agressivo
+    }));
+
     switch (selectedFilter) {
       case 'highest-dy':
         // Ordenar por DY do maior para o menor
@@ -109,7 +129,7 @@ export default function HomeClient() {
       default:
         return filteredStocks;
     }
-  }, [hiddenTickers, searchTerm, selectedFilter]);
+  }, [hiddenTickers, searchTerm, selectedFilter, investorProfile]);
 
   // Atualiza o contexto de busca ao montar se vier via query param
   useEffect(() => {
@@ -148,6 +168,16 @@ export default function HomeClient() {
       }
     }
   }, [searchTerm, applyFilters, stocks]);
+
+  // Quando o usuário faz uma busca e o filtro atual não retorna resultados, muda para 'none' (All Stocks)
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = applyFilters(stocks);
+      if (filtered.length === 0 && selectedFilter !== 'none') {
+        setSelectedFilter('none');
+      }
+    }
+  }, [searchTerm, applyFilters, stocks, selectedFilter]);
 
   const tab = searchParams.get("tab") || "stocks";
   // Determina a lista de ações exibidas atualmente

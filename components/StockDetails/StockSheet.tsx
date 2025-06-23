@@ -15,6 +15,7 @@ import { StockChart } from './StockChart'
 import { StockMetrics } from './StockMetrics'
 import { Button } from "@/components/ui/button"
 import { useWatchlist } from "@/context/WatchlistContext"
+import { useEffect, useRef, useState } from "react"
 
 interface StockSheetProps {
   selectedStock: StockData | null
@@ -26,39 +27,66 @@ interface StockSheetProps {
 export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }: StockSheetProps) => {
   const { watchlist, addToWatchlist, removeFromWatchlist } = useWatchlist();
   const isInWatchlist = selectedStock ? watchlist.includes(selectedStock.ticker) : false;
+  const [canRenderChart, setCanRenderChart] = useState(false);
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const [hasSize, setHasSize] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (sheetOpen) {
+      // Aguarda 250ms após abrir o sheet para garantir altura
+      timeout = setTimeout(() => setCanRenderChart(true), 250);
+    } else {
+      setCanRenderChart(false);
+    }
+    return () => clearTimeout(timeout);
+  }, [sheetOpen]);
+
+  useEffect(() => {
+    if (!canRenderChart) {
+      setHasSize(false);
+      return;
+    }
+    if (chartContainerRef.current) {
+      const { width, height } = chartContainerRef.current.getBoundingClientRect();
+      setHasSize(width > 0 && height > 0);
+    }
+  }, [canRenderChart, chartData]);
 
   return (
     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <SheetContent side="bottom" className="h-[80vh] py-4 gap-0 rounded-t-lg border-0 shadow-none overflow-x-auto scrollbar overflow-y-auto [&>button:first-of-type]:hidden">
+      <SheetContent side="bottom" className="h-[80vh] py-4 gap-0 rounded-t-xl border-0 shadow-none overflow-x-auto scrollbar overflow-y-auto">
         {selectedStock && (
           <>
             <SheetHeader className="p-0 px-4 mb-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <SheetTitle className="text-2xl font-bold"> {selectedStock.ticker} </SheetTitle>
+                  <div className="flex itens-center gap-2">
+                    <SheetTitle className="text-2xl font-bold"> {selectedStock.ticker} </SheetTitle>
+                    <div className="flex items-center">
+                      {isInWatchlist ? (
+                        <Button
+                          className="text-yellow-500 h-7 w-7 focus-visible:ring-0"
+                          variant="secondary"
+                          onClick={() => {
+                            removeFromWatchlist(selectedStock.ticker);
+                            setSheetOpen(false);
+                          }}
+                        >
+                          <Star fill="currentColor" />
+                        </Button>
+                      ) : (
+                        <Button
+                          className="text-gray-500 h-7 w-7 focus-visible:ring-0"
+                          variant="secondary"
+                          onClick={() => addToWatchlist(selectedStock.ticker)}
+                        >
+                          <Star fill="currentColor" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                   <p className="text-gray-500 text-sm font-normal pr-6"> {selectedStock.companhia}</p>
-                </div>
-                <div>
-                  {isInWatchlist ? (
-                    <Button
-                      className="text-yellow-500"
-                      variant="secondary"
-                      onClick={() => {
-                        removeFromWatchlist(selectedStock.ticker);
-                        setSheetOpen(false);
-                      }}
-                    >
-                      <Star fill="currentColor" />
-                    </Button>
-                  ) : (
-                    <Button
-                      className="text-gray-500"
-                      variant="secondary"
-                      onClick={() => addToWatchlist(selectedStock.ticker)}
-                    >
-                      <Star fill="currentColor" />
-                    </Button>
-                  )}
                 </div>
               </div>
               <SheetDescription className="flex items-center">
@@ -71,7 +99,11 @@ export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }
             <div className="px-4 overflow-x-auto scrollbar-hide">
               <Card className="shadow-none border-0 p-0 mb-4 bg-transparent">
                 <CardContent className="p-0">
-                  <StockChart chartData={chartData} isMobile={true} />
+                  <div ref={chartContainerRef} className="w-full min-h-[200px] max-h-96">
+                    {canRenderChart && hasSize && chartData && chartData.length > 0 && (
+                      <StockChart chartData={chartData} isMobile={true} />
+                    )}
+                  </div>
                 </CardContent>
               </Card>
 

@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -30,7 +29,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     if (!loginData.email || !loginData.password) {
-      showAlert('Por favor, preencha todos os campos.', 'error');
+      showAlert('Please fill in all fields.', 'error');
       setIsLoading(false);
       return;
     }
@@ -42,15 +41,15 @@ const LoginPage = () => {
       });
 
       if (error) {
-        showAlert('Credenciais inválidas.', 'error');
+        showAlert('Invalid credentials.', 'error');
       } else {
-        showAlert('Login realizado com sucesso!', 'success');
+        showAlert('Login successful!', 'success');
         setTimeout(() => {
-          router.push('/home'); // Redireciona para a home após login bem-sucedido
+          router.push('/home'); // Redirect to home after successful login
         }, 1000);
       }
     } catch {
-      showAlert('Erro ao fazer login. Tente novamente.', 'error');
+      showAlert('Error logging in. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -67,9 +66,9 @@ const LoginPage = () => {
       <div className="flex items-center justify-center h-full">
         <Card className="w-full max-w-md border-none shadow-none">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Entrar</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Enter</CardTitle>
             <CardDescription className="text-center">
-              Bem vindo(a) de volta.
+              Welcome back.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -85,32 +84,28 @@ const LoginPage = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder="your@email.com"
                     value={loginData.email}
                     onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                     onKeyPress={handleKeyPress}
-                    className="pl-10"
                     disabled={isLoading}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Sua senha"
+                    placeholder="Your password"
                     value={loginData.password}
                     onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                     onKeyPress={handleKeyPress}
-                    className="pl-10 pr-2"
                     disabled={isLoading}
                   />
                 </div>
@@ -122,23 +117,23 @@ const LoginPage = () => {
                   className="text-sm text-blue-600 hover:text-blue-800"
                   disabled={isLoading}
                 >
-                  Esqueceu a senha?
+                  Forgot password?
                 </button>
               </div>
 
               <Button onClick={handleLogin} className="w-full" disabled={isLoading}>
-                {isLoading ? 'Entrando...' : 'Entrar'}
+                {isLoading ? 'Logging in...' : 'Log in'}
               </Button>
             </div>
 
             <div className="text-center text-sm text-gray-600">
-              Não tem uma conta?{' '}
+              Don&apos;t have an account?{' '}
               <Button
                 onClick={() => router.push('/register')}
                 variant="link"
                 disabled={isLoading}
               >
-                Criar conta
+                Create account
               </Button>
             </div>
           </CardContent>

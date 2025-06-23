@@ -8,6 +8,8 @@ export interface StockData {
   dividendo_calc: number
   preco_atual: number
   data_preco: string
+  preco_max_agressivo: number;
+  preco_max_conservador: number;
   chartData?: { ano: number; dividendo: number }[];
 }
 

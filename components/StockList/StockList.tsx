@@ -25,9 +25,9 @@ export const StockList = ({
   )
 
   return (
-    <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 px-4 py-2 border-r border-gray-200 overflow-y-auto">
+    <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 px-4 py-2 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
       <div>
-        <h2 className="text-2xl font-semibold mb-2">Bazin Method</h2>
+        <h2 className="text-2xl font-semibold mb-1">Bazin Method</h2>
         <p className="text-base text-gray-500 mb-4">
           Maximum purchase price based on historical Dividend Yield.
         </p>

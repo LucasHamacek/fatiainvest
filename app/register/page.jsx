@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, User, Mail, Lock, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
@@ -44,25 +43,25 @@ const RegisterPage = () => {
 
     // Validações
     if (!registerData.name || !registerData.email || !registerData.password || !registerData.confirmPassword) {
-      showAlert('Por favor, preencha todos os campos.', 'error');
+      showAlert('Please fill in all fields.', 'error');
       setIsLoading(false);
       return;
     }
 
     if (!validateEmail(registerData.email)) {
-      showAlert('Por favor, insira um email válido.', 'error');
+      showAlert('Please enter a valid email.', 'error');
       setIsLoading(false);
       return;
     }
 
     if (registerData.password !== registerData.confirmPassword) {
-      showAlert('As senhas não coincidem.', 'error');
+      showAlert('Passwords do not match.', 'error');
       setIsLoading(false);
       return;
     }
 
     if (!validatePassword(registerData.password)) {
-      showAlert('A senha deve ter pelo menos 8 caracteres, incluindo maiúscula, minúscula e número.', 'error');
+      showAlert('Password must be at least 8 characters long, including uppercase, lowercase, and number.', 'error');
       setIsLoading(false);
       return;
     }
@@ -84,10 +83,10 @@ const RegisterPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        
-        showAlert('Conta criada com sucesso!', 'success');
-        
-        // Limpar formulário
+
+        showAlert('Account created successfully!', 'success');
+
+        // Clear form
         setRegisterData({
           name: '',
           email: '',
@@ -95,18 +94,18 @@ const RegisterPage = () => {
           confirmPassword: ''
         });
 
-        // Redirecionar para login após 2 segundos
+        // Redirect to login after 2 seconds
         setTimeout(() => {
           router.push('/login');
         }, 2000);
         
       } else {
         const errorData = await response.json();
-        showAlert(errorData.message || 'Erro ao criar conta.', 'error');
+        showAlert(errorData.message || 'Error creating account.', 'error');
       }
       
     } catch (error) {
-      showAlert('Erro ao criar conta. Tente novamente.', 'error');
+      showAlert('Error creating account. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -120,11 +119,11 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl">
+      <Card className="w-full max-w-md shadow-none border-none">
         <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Cadastre-se na Fatia Invest</CardTitle>
+            <CardTitle className="text-2xl font-bold">Join the Fatia Invest</CardTitle>
           <CardDescription>
-            Preencha os dados abaixo para criar sua conta
+            Fill in the details below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -138,17 +137,15 @@ const RegisterPage = () => {
           
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nome Completo</Label>
+              <Label htmlFor="name">Name</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Seu nome completo"
+                  placeholder="Your full name"
                   value={registerData.name}
                   onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
                   onKeyPress={handleKeyPress}
-                  className="pl-10"
                   disabled={isLoading}
                 />
               </div>
@@ -157,71 +154,65 @@ const RegisterPage = () => {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="seu@email.com"
+                  placeholder="your@email.com"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
                   onKeyPress={handleKeyPress}
-                  className="pl-10"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mínimo 8 caracteres"
+                  placeholder="Minimum 8 characters"
                   value={registerData.password}
                   onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
                   onKeyPress={handleKeyPress}
-                  className="pl-10 pr-2"
                   disabled={isLoading}
                 />
               </div>
               <p className="text-xs text-gray-500">
-                8+ caracteres, maiúscula, minúscula e número
+                8+ characters, uppercase, lowercase and number
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirme sua senha"
+                  placeholder="Confirm your password"
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
                   onKeyPress={handleKeyPress}
-                  className="pl-10 pr-2"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
             <Button onClick={handleRegister} className="w-full" disabled={isLoading}>
-              {isLoading ? 'Criando conta...' : 'Criar Conta'}
+              {isLoading ? 'Creating account...' : 'Create Account'}
             </Button>
           </div>
 
           <div className="text-center text-sm text-gray-600">
-            Já tem uma conta?{' '}
-            <button
+            Already have an account?{' '}
+            <Button
+            variant={"link"}
               onClick={() => router.push('/login')}
-              className="text-green-600 hover:text-green-800 font-medium"
               disabled={isLoading}
             >
-              Fazer login
-            </button>
+              Login
+            </Button>
           </div>
         </CardContent>
       </Card>
