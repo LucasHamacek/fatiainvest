@@ -74,10 +74,6 @@ export default function HomeClient() {
     'TRPL4'
   ], []);
 
-  // Exemplo de lista de tickers da watchlist (substitua por dados reais do usuário)
-  const { watchlist } = useWatchlist();
-  const watchlistStocks = stocks.filter(stock => watchlist.includes(stock.ticker));
-
   // Função para aplicar filtros nas ações
   const applyFilters = useCallback((stocksToFilter: StockData[]): StockData[] => {
     // Oculta ações com preco_atual === 0 e tickers ocultos
@@ -130,6 +126,11 @@ export default function HomeClient() {
         return filteredStocks;
     }
   }, [hiddenTickers, searchTerm, selectedFilter, investorProfile]);
+
+  // Exemplo de lista de tickers da watchlist (substitua por dados reais do usuário)
+  const { watchlist } = useWatchlist();
+  // Corrigido: aplica filtros e perfil de investidor na watchlist
+  const watchlistStocks = applyFilters(stocks.filter(stock => watchlist.includes(stock.ticker)));
 
   // Atualiza o contexto de busca ao montar se vier via query param
   useEffect(() => {
