@@ -13,7 +13,6 @@ import { useSearch } from "@/context/SearchContext";
 import { Watchlist } from "@/components/StockList/Watchlist";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useWatchlist } from "@/context/WatchlistContext";
-import { supabase } from "@/lib/supabaseClient";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/context/AuthContext";
 
@@ -52,20 +51,20 @@ export default function HomeClient() {
     // DEBUG: Veja o valor do searchTerm e o tamanho da lista original
     console.log('[applyFilters] searchTerm:', searchTerm, '| stocksToFilter:', stocksToFilter.length);
     // Oculta ações com preco_atual === 0 e tickers ocultos
-    let filteredStocks = stocksToFilter
+    const filtered = stocksToFilter
       .filter(stock => stock.preco_atual !== 0)
       .filter(stock => !hiddenTickers.includes(stock.ticker));
 
     // Filtro de busca
-    if (searchTerm) {
-      filteredStocks = filteredStocks.filter(stock =>
-        (stock.ticker ?? '').toLowerCase().includes((searchTerm ?? '').toLowerCase()) ||
-        (stock.companhia ?? '').toLowerCase().includes((searchTerm ?? '').toLowerCase())
-      );
-    }
+    const filteredWithSearch = searchTerm
+      ? filtered.filter(stock =>
+          (stock.ticker ?? '').toLowerCase().includes((searchTerm ?? '').toLowerCase()) ||
+          (stock.companhia ?? '').toLowerCase().includes((searchTerm ?? '').toLowerCase())
+        )
+      : filtered;
 
     // Atualiza preco_max_calc conforme perfil
-    filteredStocks = filteredStocks.map(stock => ({
+    const filteredStocks = filteredWithSearch.map(stock => ({
       ...stock,
       preco_max_calc: investorProfile === "conservador" ? stock.preco_max_conservador : stock.preco_max_agressivo
     }));
@@ -95,7 +94,7 @@ export default function HomeClient() {
   // Função para aplicar filtros na watchlist (sem searchTerm)
   const filterWatchlistStocks = useCallback((stocksToFilter: StockData[]): StockData[] => {
     // Oculta ações com preco_atual === 0 e tickers ocultos
-    let filteredStocks = stocksToFilter
+    const filteredStocks = stocksToFilter
       .filter(stock => stock.preco_atual !== 0)
       .filter(stock => !hiddenTickers.includes(stock.ticker));
     // Atualiza preco_max_calc conforme perfil

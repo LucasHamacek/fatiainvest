@@ -17,7 +17,6 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { toast } from "sonner"
-import type { User } from "@supabase/supabase-js";
 import { useAuth } from "@/context/AuthContext";
 import { useDebouncedCallback } from "use-debounce";
 

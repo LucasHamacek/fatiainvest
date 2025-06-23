@@ -1,8 +1,6 @@
 // components/Layout/Header.tsx
 import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState, useMemo, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import type { User } from "@supabase/supabase-js";
 import { useSearch } from "@/context/SearchContext";
 import { SearchInput } from '../StockList/SearchInput'
 import { Button } from "@/components/ui/button";
@@ -40,9 +38,6 @@ export const Header = () => {
     }
   };
 
-  // Memoiza a lista de stocks para evitar re-renderizações desnecessárias
-  const memoizedStocks = useMemo(() => stocks.map(s => ({ ticker: s.ticker, companhia: s.companhia })), [stocks]);
-
   return (
     <div className='flex items-center gap-2 p-4 md:border-b border-gray-200 dark:border-zinc-700 h-16'>
       <a href="/home">
@@ -56,8 +51,8 @@ export const Header = () => {
       <div className='w-full'>
         <SearchInput
           searchTerm={searchTerm}
-          setSearchTerm={useCallback(handleSearch, [pathname, router, setSearchTerm])}
-          stocks={memoizedStocks}
+          setSearchTerm={handleSearch}
+          stocks={stocks.map(s => ({ ticker: s.ticker, companhia: s.companhia }))}
         />
       </div>
       {/* Botão About visível para todos em desktop */}
