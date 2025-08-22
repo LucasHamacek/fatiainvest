@@ -18,16 +18,12 @@ export const calculateDYProjection = (dividendoCalc: number | null, precoAtual: 
 export const getBackgroundColor = (stock: StockData): string => {
   const currentPrice = stock.preco_atual || 0
   const maxPrice = stock.preco_max_calc || 0
-  
   if (!currentPrice || !maxPrice) return 'bg-blue-500'
-  
-  const variation = ((currentPrice - maxPrice) / maxPrice) * 100
-  
-  if (variation > 10 || variation < -10) {
+
+  if (currentPrice > maxPrice) {
     return 'bg-red-400'
-  } else if (variation > 5 || variation < -5) {
-    return 'bg-green-400'
-  } else {
+  } else if (currentPrice <= maxPrice) {
     return 'bg-green-400'
   }
+  return 'bg-blue-400'
 }
