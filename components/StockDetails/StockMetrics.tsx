@@ -7,10 +7,10 @@ import { StockData, ChartData } from '../../types/stock.types'
 import { calculateVariation, calculateDYProjection } from '../../utils/stockCalculations'
 import { Info, HelpCircle } from 'lucide-react'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface StockMetricsProps {
   selectedStock: StockData
@@ -25,14 +25,16 @@ export const StockMetrics = ({ selectedStock, chartData }: StockMetricsProps) =>
           <div className="flex items-center gap-1">
             <p className="text-sm font-light truncate">Current Price</p>
             {selectedStock.data_atualizacao && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info size={16} className="text-gray-400" />
-                </TooltipTrigger>
-                <TooltipContent>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <span tabIndex={0} role="button">
+                    <Info size={16} className="text-gray-400 cursor-pointer" />
+                  </span>
+                </PopoverTrigger>
+                <PopoverContent>
                   Updated: {new Date(selectedStock.data_atualizacao).toLocaleDateString()}
-                </TooltipContent>
-              </Tooltip>
+                </PopoverContent>
+              </Popover>
             )}
           </div>
           <span className="font-medium">
@@ -46,14 +48,16 @@ export const StockMetrics = ({ selectedStock, chartData }: StockMetricsProps) =>
         <div className="flex items-center justify-between min-w-48 w-full">
           <div className="flex items-center gap-1">
             <p className="text-sm font-light truncate">Variation</p>
-            <Tooltip>
-              <TooltipTrigger>
-                <HelpCircle size={16} className="text-gray-400" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-3xs text-wrap">
+            <Popover>
+              <PopoverTrigger asChild>
+                <span tabIndex={0} role="button">
+                  <HelpCircle size={16} className="text-gray-400 cursor-pointer" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-3xs text-wrap">
                 Difference between the current price and the maximum price (Bazin Method). Shows how much the current price is above or below the calculated fair value.
-              </TooltipContent>
-            </Tooltip>
+              </PopoverContent>
+            </Popover>
           </div>
           <p className="font-medium">
             {calculateVariation(selectedStock.preco_atual, selectedStock.preco_max_calc)}%
@@ -62,42 +66,48 @@ export const StockMetrics = ({ selectedStock, chartData }: StockMetricsProps) =>
         <div className="flex items-center justify-between min-w-48 w-full">
           <div className="flex items-center gap-1">
             <p className="text-sm font-light truncate">Avg. Dividend Yield</p>
-            <Tooltip>
-              <TooltipTrigger>
-                <HelpCircle size={16} className="text-gray-400" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-3xs text-wrap">
+            <Popover>
+              <PopoverTrigger asChild>
+                <span tabIndex={0} role="button">
+                  <HelpCircle size={16} className="text-gray-400 cursor-pointer" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-3xs text-wrap">
                 Average dividend yield over the last 5 years, or over all available years with distributed dividends.
-              </TooltipContent>
-            </Tooltip>
+              </PopoverContent>
+            </Popover>
           </div>
           <p className="font-medium">{parseFloat((selectedStock.dy_medio_calc || 0).toString()).toFixed(2)}%</p>
         </div>
         <div className="flex items-center justify-between min-w-48 w-full">
           <div className="flex items-center gap-1">
             <p className="text-sm font-light truncate">Avg. Dividend</p>
-            <Tooltip>
-              <TooltipTrigger>
-                <HelpCircle size={16} className="text-gray-400" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-3xs text-wrap">
+            <Popover>
+              <PopoverTrigger asChild>
+                <span tabIndex={0} role="button">
+                  <HelpCircle size={16} className="text-gray-400 cursor-pointer" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-3xs text-wrap">
                 Average dividend amount distributed over the last 5 years, or over all available years with distributed dividends.
-              </TooltipContent>
-            </Tooltip>
+              </PopoverContent>
+            </Popover>
           </div>
           <p className="font-medium">{parseFloat((selectedStock.dividendo_calc || 0).toString()).toFixed(2)}</p>
         </div>
         <div className="flex items-center justify-between min-w-48 w-full">
           <div className="flex items-center gap-1">
             <p className="text-sm font-light truncate">DY Projection</p>
-            <Tooltip>
-              <TooltipTrigger>
-                <HelpCircle size={16} className="text-gray-400" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-3xs text-wrap">
+            <Popover>
+              <PopoverTrigger asChild>
+                <span tabIndex={0} role="button">
+                  <HelpCircle size={16} className="text-gray-400 cursor-pointer" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-3xs text-wrap">
                 Projected dividend yield based on the average dividend and the current price, assuming the company continues to distribute dividends at the same average rate.
-              </TooltipContent>
-            </Tooltip>
+              </PopoverContent>
+            </Popover>
           </div>
           <p className="font-medium">
             {calculateDYProjection(selectedStock.dividendo_calc, selectedStock.preco_atual)}%
