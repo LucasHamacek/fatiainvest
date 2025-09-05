@@ -19,6 +19,7 @@ import { supabase } from "@/lib/supabaseClient"
 import { toast } from "sonner"
 import { useAuth } from "@/context/AuthContext";
 import { useDebouncedCallback } from "use-debounce";
+import { ArrowLeft } from "lucide-react";
 
 export default function SettingsPage() {
     const { setTheme, theme } = useTheme();
@@ -118,6 +119,9 @@ export default function SettingsPage() {
 
     return (
         <div className="max-w-2xl mx-auto py-4 px-4">
+            <Button variant="ghost" className="mb-2" onClick={() => window.location.href = '/home'}>
+                <ArrowLeft className="mr-2 size-4" /> Voltar
+            </Button>
             <Card className="mb-6 shadow-none border-0 bg-transparent">
                 <CardHeader className="p-0">
                     <CardTitle className="text-2xl font-normal">Profile</CardTitle>

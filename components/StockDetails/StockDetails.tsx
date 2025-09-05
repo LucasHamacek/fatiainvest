@@ -48,7 +48,7 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        className="text-yellow-500"
+                        className="rounded-full text-yellow-500 w-[32px] h-[32px] focus-visible:ring-0 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none"
                         variant="secondary"
                         onClick={() => removeFromWatchlist(selectedStock.ticker)}
                       >
@@ -65,7 +65,7 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        className="text-gray-500"
+                        className="rounded-full text-gray-500 w-[32px] h-[32px] focus-visible:ring-0 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none"
                         variant="secondary"
                         onClick={() => addToWatchlist(selectedStock.ticker)}
                       >

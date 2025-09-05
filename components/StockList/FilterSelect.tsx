@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-export type FilterOption = 'none' | 'highest-dy' | 'opportunity';
+export type FilterOption = 'none' | 'highest-dy' | 'opportunity' | 'watchlist';
 
 interface FilterSelectProps {
   selectedFilter: FilterOption
@@ -18,7 +18,8 @@ export const FilterSelect = ({ selectedFilter, onFilterChange }: FilterSelectPro
   const filterOptions = [
     { value: 'none' as FilterOption, label: 'All Stocks' },
     { value: 'highest-dy' as FilterOption, label: 'Highest Dividend Yield' },
-    { value: 'opportunity' as FilterOption, label: 'Opportunity' }
+    { value: 'opportunity' as FilterOption, label: 'Opportunity' },
+    { value: 'watchlist' as FilterOption, label: 'Watchlist' },
   ];
 
   return (

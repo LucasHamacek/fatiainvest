@@ -10,7 +10,6 @@ import { StockList } from '../../components/StockList/StockList';
 import { StockDetails } from '../../components/StockDetails/StockDetails';
 import { StockSheet } from '../../components/StockDetails/StockSheet';
 import { useSearch } from "@/context/SearchContext";
-import { Watchlist } from "@/components/StockList/Watchlist";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useWatchlist } from "@/context/WatchlistContext";
 import { Toaster } from "@/components/ui/sonner";
@@ -46,6 +45,27 @@ export default function HomeClient() {
     'TRPL4'
   ], []);
 
+  // Obter dados da watchlist
+  const { watchlist } = useWatchlist();
+
+  // Função para aplicar filtros na watchlist (sem searchTerm)
+  const filterWatchlistStocks = useCallback((stocksToFilter: StockData[]): StockData[] => {
+    // Oculta ações com preco_atual === 0 e tickers ocultos
+    const filteredStocks = stocksToFilter
+      .filter(stock => stock.preco_atual !== 0)
+      .filter(stock => !hiddenTickers.includes(stock.ticker));
+    // Atualiza preco_max_calc conforme perfil
+    return filteredStocks.map(stock => ({
+      ...stock,
+      preco_max_calc: investorProfile === "conservador" ? stock.preco_max_conservador : stock.preco_max_agressivo
+    }));
+  }, [hiddenTickers, investorProfile]);
+
+  // Calcular watchlistStocks usando useMemo para evitar recálculos desnecessários
+  const watchlistStocks = useMemo(() => {
+    return filterWatchlistStocks(stocks.filter(stock => watchlist.includes(stock.ticker)));
+  }, [stocks, watchlist, filterWatchlistStocks]);
+
   // Função para aplicar filtros nas ações
   const applyFilters = useCallback((stocksToFilter: StockData[]): StockData[] => {
     // DEBUG: Veja o valor do searchTerm e o tamanho da lista original
@@ -77,37 +97,19 @@ export default function HomeClient() {
           .sort((a, b) => (b.dy_medio_calc || 0) - (a.dy_medio_calc || 0));
 
       case 'opportunity':
-        // Ações com preço atual próximo do preço máximo (+-10%)
+        // Ações com preço atual <= preço máximo Bazin E DY médio > 6%
         return filteredStocks.filter(stock => {
-          if (!stock.preco_atual || !stock.preco_max_calc) return false;
-          const currentPrice = stock.preco_atual;
-          const maxPrice = stock.preco_max_calc;
-          const percentageFromMax = ((maxPrice - currentPrice) / maxPrice) * 100;
-          return percentageFromMax >= -10 && percentageFromMax <= 10;
+          if (!stock.preco_atual || !stock.preco_max_calc || !stock.dy_medio_calc) return false;
+          return stock.preco_atual <= stock.preco_max_calc && stock.dy_medio_calc > 6;
         });
+
+      case 'watchlist':
+        return watchlistStocks;
 
       default:
         return filteredStocks;
     }
-  }, [hiddenTickers, searchTerm, selectedFilter, investorProfile]);
-
-  // Função para aplicar filtros na watchlist (sem searchTerm)
-  const filterWatchlistStocks = useCallback((stocksToFilter: StockData[]): StockData[] => {
-    // Oculta ações com preco_atual === 0 e tickers ocultos
-    const filteredStocks = stocksToFilter
-      .filter(stock => stock.preco_atual !== 0)
-      .filter(stock => !hiddenTickers.includes(stock.ticker));
-    // Atualiza preco_max_calc conforme perfil
-    return filteredStocks.map(stock => ({
-      ...stock,
-      preco_max_calc: investorProfile === "conservador" ? stock.preco_max_conservador : stock.preco_max_agressivo
-    }));
-  }, [hiddenTickers, investorProfile]);
-
-  // Exemplo de lista de tickers da watchlist (substitua por dados reais do usuário)
-  const { watchlist } = useWatchlist();
-  // Corrigido: aplica filtros e perfil de investidor na watchlist
-  const watchlistStocks = filterWatchlistStocks(stocks.filter(stock => watchlist.includes(stock.ticker)));
+  }, [hiddenTickers, searchTerm, selectedFilter, investorProfile, watchlistStocks]);
 
   // Atualiza o contexto de busca ao montar se vier via query param
   useEffect(() => {
@@ -157,16 +159,13 @@ export default function HomeClient() {
     }
   }, [searchTerm, applyFilters, stocks, selectedFilter]);
 
-  const tab = searchParams.get("tab") || "stocks";
-  // Determina a lista de ações exibidas atualmente
-  const displayedStocks = tab === "watchlist" ? watchlistStocks : applyFilters(stocks);
-
   // Limpa o selectedStock se a lista exibida ficar vazia
   useEffect(() => {
-    if (displayedStocks.length === 0 && selectedStock) {
-      setSelectedStock(null);
+    if (selectedStock && stocks.length > 0) {
+      const found = stocks.find(s => s.ticker === selectedStock.ticker);
+      if (!found) setSelectedStock(null);
     }
-  }, [displayedStocks.length, selectedStock]);
+  }, [stocks, selectedStock]);
 
   // Memoiza a função de clique para evitar re-renderizações desnecessárias em StockCard/Watchlist
   const handleStockClick = useCallback((stock: StockData) => {
@@ -180,39 +179,26 @@ export default function HomeClient() {
     return <LoadingScreen />;
   }
 
-  if (tab === "watchlist" && !user) {
-    return (
-      <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">
-        Login required to manage favorites.
-      </div>
-    );
-  }
-
   return (
     <>
       <Toaster />
-      <div className="flex-1 flex max-h-[calc(100vh-4rem)] overflow-hidden">
-        {tab === "watchlist" ? (
-          <Watchlist
-            stocks={watchlistStocks}
-            onStockClick={handleStockClick}
-          />
-        ) : (
-          <StockList
-            stocks={applyFilters(stocks)}
-            onStockClick={handleStockClick}
-            selectedFilter={selectedFilter}
-            onFilterChange={setSelectedFilter}
-          />
-        )}
+      <div className="flex-1 flex h-[calc(100vh-56px)] md:h-[calc(100vh-40px)] overflow-hidden">
+        <StockList
+          stocks={stocks} // Passa sempre a lista completa
+          onStockClick={handleStockClick}
+          selectedFilter={selectedFilter}
+          onFilterChange={setSelectedFilter}
+          /*searchTerm={searchTerm}*/
+          investorProfile={investorProfile}
+        />
         <StockSheet
-          selectedStock={displayedStocks.length > 0 ? selectedStock : null}
+          selectedStock={selectedStock}
           chartData={chartData}
           sheetOpen={sheetOpen}
           setSheetOpen={setSheetOpen}
         />
         <StockDetails
-          selectedStock={displayedStocks.length > 0 ? selectedStock : null}
+          selectedStock={selectedStock}
           chartData={chartData}
         />
       </div>

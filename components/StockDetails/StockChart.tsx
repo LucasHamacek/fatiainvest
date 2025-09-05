@@ -52,6 +52,12 @@ export const StockChart = ({ chartData, isMobile = false }: StockChartProps) => 
               right: 0,
             }}
           >
+            <defs>
+              <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#007AFF" stopOpacity={1}/>
+                <stop offset="100%" stopColor="#007AFF" stopOpacity={0.1}/>
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="year"
@@ -75,9 +81,8 @@ export const StockChart = ({ chartData, isMobile = false }: StockChartProps) => 
             <Area
               dataKey="Dividend"
               type="linear"
-              fill="var(--color-desktop)"
-              fillOpacity={0.7}
-              stroke="var(--color-desktop)"
+              fill="url(#colorGradient)"
+              stroke="#007AFF"
             />
           </AreaChart>
         </ChartContainer>

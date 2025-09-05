@@ -60,13 +60,13 @@ export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }
           <>
             <SheetHeader className="p-0 px-4 mb-4">
               <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex itens-center gap-2">
+                <div className="w-full mr-10">
+                  <div className="flex w-full items-center justify-between">
                     <SheetTitle className="text-2xl font-bold"> {selectedStock.ticker} </SheetTitle>
                     <div className="flex items-center">
                       {isInWatchlist ? (
                         <Button
-                          className="text-yellow-500 h-7 w-7 focus-visible:ring-0"
+                          className="rounded-full text-yellow-500 w-[32px] h-[32px] focus-visible:ring-0 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none"
                           variant="secondary"
                           onClick={() => {
                             removeFromWatchlist(selectedStock.ticker);
@@ -77,7 +77,7 @@ export const StockSheet = ({ selectedStock, chartData, sheetOpen, setSheetOpen }
                         </Button>
                       ) : (
                         <Button
-                          className="text-gray-500 h-7 w-7 focus-visible:ring-0"
+                          className="rounded-full text-gray-500 w-[32px] h-[32px] focus-visible:ring-0 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none"
                           variant="secondary"
                           onClick={() => addToWatchlist(selectedStock.ticker)}
                         >
