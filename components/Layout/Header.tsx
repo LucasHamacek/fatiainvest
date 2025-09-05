@@ -16,7 +16,7 @@ export const Header = () => {
   };
 
   return (
-    <div className='flex items-center gap-2 justify-between md:justify-start px-4 py-2 md:border-b border-gray-200 dark:border-zinc-700 h-14 md:h-10'>
+    <div className='font-[inter] flex items-center gap-2 justify-between md:justify-start px-4 py-2 md:border-b border-gray-200 dark:border-zinc-700 h-14 md:h-10'>
       <a href="/home">
         <svg className="size-5" viewBox="0 0 23 35" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M11.3333 23.1666C11.3333 24.6549 11.0402 26.1287 10.4706 27.5037C9.90109 28.8787 9.06629 30.1281 8.01389 31.1805C6.96149 32.2329 5.71211 33.0677 4.33708 33.6373C2.96206 34.2068 1.48832 34.5 0 34.5L4.95396e-07 23.1666H11.3333Z" fill="#74B3FB" />
@@ -76,7 +76,7 @@ export const Header = () => {
               Notifications
             </Button>*/}
             <Button
-              className="p-0 text-gray-600 hover:text-gray-900 hover:no-underline"
+              className="p-0 text-sm text-gray-600 hover:text-gray-900 hover:no-underline"
               variant="link"
               onClick={() => router.push("/settings")}
             >
@@ -92,7 +92,7 @@ export const Header = () => {
         </>
       ) : (
         <>
-        <div className="hidden md:flex items-center gap-4 ml-2">
+        <div className="text-sm hidden md:flex items-center gap-4 ml-2">
           <Button className='p-0 text-gray-600 hover:text-gray-900 hover:no-underline'
             variant="link"
             onClick={() => window.location.href = '/login'}

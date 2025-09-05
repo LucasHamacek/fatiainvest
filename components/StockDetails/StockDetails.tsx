@@ -30,7 +30,7 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
         <Card className="shadow-none border-0 p-0 mb-4 bg-transparent">
           <CardHeader className="flex items-center justify-between mb-4 p-0">
             <div className="flex flex-col">
-              <CardTitle className="text-3xl font-bold mb-2">
+              <CardTitle className="text-2xl font-bold mb-2">
                 {selectedStock.ticker}
                 <span className="text-gray-500 text-sm font-normal ml-1"> {selectedStock.companhia}</span>
               </CardTitle>

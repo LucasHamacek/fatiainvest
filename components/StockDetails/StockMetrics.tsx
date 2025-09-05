@@ -44,7 +44,7 @@ export const StockMetrics = ({ selectedStock, chartData }: StockMetricsProps) =>
   }
 
   return (
-    <Card className="p-0 shadow-none border-0 bg-transparent">
+    <Card className="p-0 text-sm shadow-none border-0 bg-transparent">
       <CardContent className="flex flex-col lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-x-4 gap-y-2 p-0 lg:max-h-64 overflow-y-auto scrollbar relative" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {/* Separadores verticais entre colunas - calculados automaticamente */}
         {separators}

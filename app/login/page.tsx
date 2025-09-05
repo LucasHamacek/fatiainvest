@@ -62,7 +62,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='flex-1 h-[calc(100vh-4rem)]'>
+    <div className='font-[inter] flex-1 h-[calc(100vh-4rem)]'>
       <div className="flex items-center justify-center h-full">
         <Card className="w-full max-w-md border-none shadow-none">
           <CardHeader className="space-y-1">

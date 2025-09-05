@@ -21,11 +21,11 @@ export const StockCard = ({ stock, onClick }: StockCardProps) => {
       onClick={() => onClick(stock)}
     >
       <CardHeader className="w-full p-0 gap-0">
-        <CardTitle className="text-lg font-semibold">{stock.ticker}</CardTitle>
+        <CardTitle className="text-base font-semibold">{stock.ticker}</CardTitle>
         <CardDescription className="truncate">{stock.companhia}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col min-w-16 items-end justify-center p-0 gap-[2px]">
-        <p className={`flex gap-1 text-sm font-semibold text-white ${getBackgroundColor(stock)} justify-center min-w-[52px] px-1 py-[1px] rounded-[6px]`}>
+        <p className={`flex gap-1 text-sm font-medium text-white ${getBackgroundColor(stock)} justify-center min-w-[52px] px-1 py-[1px] rounded-[6px]`}>
           {parseFloat((stock.preco_max_calc || 0).toString()).toFixed(2)}
         </p>
         <p className="flex gap-1 text-sm">

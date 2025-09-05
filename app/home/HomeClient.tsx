@@ -182,7 +182,7 @@ export default function HomeClient() {
   return (
     <>
       <Toaster />
-      <div className="flex-1 flex h-[calc(100vh-56px)] md:h-[calc(100vh-40px)] overflow-hidden">
+      <div className="font-[inter] flex-1 flex h-[calc(100vh-56px)] md:h-[calc(100vh-40px)] overflow-hidden">
         <StockList
           stocks={stocks} // Passa sempre a lista completa
           onStockClick={handleStockClick}
