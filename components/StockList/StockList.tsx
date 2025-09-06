@@ -109,8 +109,8 @@ export const StockList = ({
   // Empty state para watchlist sem login
   if (selectedFilter === 'watchlist' && !user) {
     return (
-      <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
-        <div>
+      <div className="w-full h-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto flex flex-col">
+        <div className="flex flex-col">
           <h2 className="text-[22pt] font-semibold mb-1">Ações</h2>
           <p className="text-[13pt] text-gray-500 mb-4">
             Preço máximo de compra usando o método de dividend yield do Bazin.
@@ -124,8 +124,8 @@ export const StockList = ({
         <div className="flex items-center justify-between">
           <FilterSelect selectedFilter={selectedFilter} onFilterChange={onFilterChange} />
         </div>
-        <div className="flex flex-col items-center justify-center h-min-[200px]">
-          <div className="text-center text-[11pt] text-gray-500 mt-8">
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center text-[11pt] text-gray-500">
             <p>Faça login para adicionar ações aos seus favoritos</p>
           </div>
         </div>
@@ -136,8 +136,8 @@ export const StockList = ({
   // Empty state para watchlist sem ações
   if (selectedFilter === 'watchlist' && user && filteredStocks.length === 0) {
     return (
-      <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
-        <div>
+      <div className="w-full h-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto flex flex-col">
+        <div className="flex flex-col">
           <h2 className="text-[22pt] font-semibold mb-1">Ações</h2>
           <p className="text-[13pt] text-gray-500 mb-4">
             Preço máximo de compra usando o método de dividend yield do Bazin.
@@ -151,8 +151,8 @@ export const StockList = ({
         <div className="flex items-center justify-between">
           <FilterSelect selectedFilter={selectedFilter} onFilterChange={onFilterChange} />
         </div>
-        <div className="flex flex-col items-center justify-center min-h-[200px]">
-          <div className="text-center text-gray-500 mt-8">
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center text-[11pt] text-gray-500">
             <p>Sua lista de favoritos está vazia. Adicione algumas ações para acompanhá-las aqui.</p>
           </div>
         </div>
@@ -161,8 +161,8 @@ export const StockList = ({
   }
 
   return (
-    <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
-      <div>
+    <div className="w-full h-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto flex flex-col">
+      <div className="flex flex-col">
         <h2 className="text-[22pt] font-semibold mb-1">Ações</h2>
         <p className="text-[13pt] font-normal text-gray-500 mb-4">
           Preço máximo de compra usando o método de dividend yield do Bazin.
@@ -196,7 +196,7 @@ export const StockList = ({
                 onClick={() => handleToggleRemove(stock.ticker)}
                 aria-label="Selecionar para remover"
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill={toRemove.has(stock.ticker) ? '#ef4444' : 'none'} stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill={toRemove.has(stock.ticker) ? '#ef4444' : 'none'} stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
               </button>
             )}
           </div>
@@ -214,15 +214,17 @@ export const StockList = ({
         )}
       </div>
       {displayedStocks.length === 0 && (
-        <div className="text-center text-[11pt] text-sm text-gray-500 mt-8">
-          <p>
-            {selectedFilter === 'watchlist'
-              ? 'Ainda não há ações na sua lista. Adicione algumas ações para acompanhá-las aqui.'
-              : 'Nenhuma ação encontrada.'}
-          </p>
-          {selectedFilter !== 'watchlist' && (
-            <p>Experimente outros filtros ou termos de busca.</p>
-          )}
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center text-[11pt] text-sm text-gray-500">
+            <p>
+              {selectedFilter === 'watchlist'
+                ? 'Ainda não há ações na sua lista. Adicione algumas ações para acompanhá-las aqui.'
+                : 'Nenhuma ação encontrada.'}
+            </p>
+            {selectedFilter !== 'watchlist' && (
+              <p>Experimente outros filtros ou termos de busca.</p>
+            )}
+          </div>
         </div>
       )}
     </div>

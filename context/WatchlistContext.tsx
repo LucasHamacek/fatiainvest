@@ -39,9 +39,9 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
   }, [user?.id]);
 
   const showLoginToast = () => {
-    toast("Login to add or remove stocks from your favorites.", {
+    toast("Entre para adicionar ou remover ações dos seus favoritos.", {
       action: {
-        label: 'Login',
+        label: 'Entrar',
         onClick: () => window.location.href = "/login",
       }
     });
@@ -55,7 +55,7 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
     }
     setWatchlist((prev) => (prev.includes(ticker) ? prev : [...prev, ticker]));
     await supabase.from("watchlists").upsert({ user_id: user.id, ticker });
-    toast.success("Stock added to favorites!");
+    toast.success("Ação adicionada aos favoritos!");
   };
 
   const removeFromWatchlist = async (ticker: string) => {
@@ -65,7 +65,7 @@ export function WatchlistProvider({ children }: { children: React.ReactNode }) {
     }
     setWatchlist((prev) => prev.filter((t) => t !== ticker));
     await supabase.from("watchlists").delete().eq("user_id", user.id).eq("ticker", ticker);
-    toast.success("Stock removed from favorites!");
+    toast.success("Ação removida dos favoritos!");
   };
 
   return (
