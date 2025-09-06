@@ -126,7 +126,7 @@ export const StockList = ({
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="text-center text-[11pt] text-gray-500">
-            <p>Faça login para adicionar ações aos seus favoritos</p>
+            <p>Entre para adicionar ações aos seus favoritos</p>
           </div>
         </div>
       </div>
