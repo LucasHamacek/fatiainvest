@@ -48,15 +48,15 @@ export const Header = () => {
                   {/* Removido: MenubarItem para Favorites */}
                   {/*<MenubarItem className="" onClick={() => router.push("/notifications")}> Notifications <MenubarShortcut><Bell className="stroke-1.5" /></MenubarShortcut></MenubarItem>
                   <MenubarSeparator />*/}
-                  <MenubarItem className="" onClick={() => router.push("/settings")}> Settings <MenubarShortcut></MenubarShortcut></MenubarItem>
+                  <MenubarItem className="" onClick={() => router.push("/settings")}> Configurações <MenubarShortcut></MenubarShortcut></MenubarItem>
                   <MenubarSeparator />
-                  <MenubarItem className="w-full focus:text-accent-none font-medium" onClick={handleLogout}>Logout <MenubarShortcut></MenubarShortcut></MenubarItem>
+                  <MenubarItem className="w-full focus:text-accent-none font-medium" onClick={handleLogout}>Sair <MenubarShortcut></MenubarShortcut></MenubarItem>
                 </>
               ) : (
                 <>                  
-                  <MenubarItem className="w-full" onClick={() => window.location.href = '/register'}>Register</MenubarItem>
+                  <MenubarItem className="w-full" onClick={() => window.location.href = '/register'}>Cadastrar</MenubarItem>
                   <MenubarSeparator />
-                  <MenubarItem className="w-full font-medium" onClick={() => window.location.href = '/login'}> Login <MenubarShortcut></MenubarShortcut></MenubarItem>
+                  <MenubarItem className="w-full font-medium" onClick={() => window.location.href = '/login'}> Entrar <MenubarShortcut></MenubarShortcut></MenubarItem>
                 </>
               )}
             </MenubarContent>
@@ -76,34 +76,34 @@ export const Header = () => {
               Notifications
             </Button>*/}
             <Button
-              className="p-0 text-sm text-gray-600 hover:text-gray-900 hover:no-underline"
+              className="p-0 text-[10pt] text-gray-600 hover:text-gray-900 hover:no-underline"
               variant="link"
               onClick={() => router.push("/settings")}
             >
-              Settings
+              Configurações
             </Button>
-            <Button className='p-0 text-gray-600 hover:text-gray-900 hover:no-underline'
+            <Button className='p-0 text-[10pt] text-gray-600 hover:text-gray-900 hover:no-underline'
               variant="link"
               onClick={handleLogout}
             >
-              Logout
+              Sair
             </Button>
           </div>
         </>
       ) : (
         <>
-        <div className="text-sm hidden md:flex items-center gap-4 ml-2">
-          <Button className='p-0 text-gray-600 hover:text-gray-900 hover:no-underline'
+        <div className="hidden md:flex items-center gap-4 ml-2">
+          <Button className='p-0 text-[10pt] text-gray-600 hover:text-gray-900 hover:no-underline'
             variant="link"
             onClick={() => window.location.href = '/login'}
           >
-            Login
+            Entrar
           </Button>
-          <Button className='p-0 text-gray-600 hover:text-gray-900 hover:no-underline'
+          <Button className='p-0 text-[10pt] text-gray-600 hover:text-gray-900 hover:no-underline'
             variant="link"
             onClick={() => window.location.href = '/register'}
           >
-            Register
+            Cadastrar
           </Button>
           </div>
         </>

@@ -30,11 +30,11 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
         <Card className="shadow-none border-0 p-0 mb-4 bg-transparent">
           <CardHeader className="flex items-center justify-between mb-4 p-0">
             <div className="flex flex-col">
-              <CardTitle className="text-2xl font-bold mb-2">
+              <CardTitle className="text-[17pt] font-bold mb-2">
                 {selectedStock.ticker}
-                <span className="text-gray-500 text-sm font-normal ml-1"> {selectedStock.companhia}</span>
+                <span className="text-gray-500 text-[11pt] font-normal ml-1"> {selectedStock.companhia}</span>
               </CardTitle>
-              <CardDescription className="text-sm text-gray-500 pb-4">
+              <CardDescription className="text-[11pt] text-gray-500 pb-4">
                 <p className="flex itens-center" >
                   Ibovespa <Dot className="size-5" />
                   <span>{selectedStock.setor || 'N/A'}</span> <Dot className="size-5" />
@@ -56,7 +56,7 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className="font-medium">
-                      Remove from Watchlist
+                      Remover dos Favoritos
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -73,7 +73,7 @@ export const StockDetails = ({ selectedStock, chartData }: StockDetailsProps) =>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className="font-medium">
-                      Add to Watchlist
+                      Adicionar aos Favoritos
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

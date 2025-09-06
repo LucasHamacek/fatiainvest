@@ -111,9 +111,9 @@ export const StockList = ({
     return (
       <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
         <div>
-          <h2 className="text-2xl font-semibold mb-1">Smart Stock Pricing</h2>
-          <p className="text-base text-gray-500 mb-4">
-            {"Maximum purchase price using Bazin's dividend yield method."}
+          <h2 className="text-[22pt] font-semibold mb-1">Ações</h2>
+          <p className="text-[13pt] text-gray-500 mb-4">
+            Preço máximo de compra usando o método de dividend yield do Bazin.
           </p>
           <SearchInput
             searchTerm={searchTerm}
@@ -124,9 +124,9 @@ export const StockList = ({
         <div className="flex items-center justify-between">
           <FilterSelect selectedFilter={selectedFilter} onFilterChange={onFilterChange} />
         </div>
-        <div className="flex flex-col items-center justify-center min-h-[200px]">
-          <div className="text-center text-gray-500 mt-8">
-            <p>Login to add stocks to your favorites.</p>
+        <div className="flex flex-col items-center justify-center h-min-[200px]">
+          <div className="text-center text-[11pt] text-gray-500 mt-8">
+            <p>Faça login para adicionar ações aos seus favoritos</p>
           </div>
         </div>
       </div>
@@ -138,9 +138,9 @@ export const StockList = ({
     return (
       <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
         <div>
-          <h2 className="text-2xl font-semibold mb-1">Smart Stock Pricing</h2>
-          <p className="text-base text-gray-500 mb-4">
-            {"Maximum purchase price using Bazin's dividend yield method."}
+          <h2 className="text-[22pt] font-semibold mb-1">Ações</h2>
+          <p className="text-[13pt] text-gray-500 mb-4">
+            Preço máximo de compra usando o método de dividend yield do Bazin.
           </p>
           <SearchInput
             searchTerm={searchTerm}
@@ -153,7 +153,7 @@ export const StockList = ({
         </div>
         <div className="flex flex-col items-center justify-center min-h-[200px]">
           <div className="text-center text-gray-500 mt-8">
-            <p>Your favorites is empty. Add some stocks to track them here.</p>
+            <p>Sua lista de favoritos está vazia. Adicione algumas ações para acompanhá-las aqui.</p>
           </div>
         </div>
       </div>
@@ -163,9 +163,9 @@ export const StockList = ({
   return (
     <div className="w-full md:max-w-80 lg:max-w-96 xl:max-w-112 p-4 md:border-r border-gray-200 dark:border-zinc-700 overflow-y-auto">
       <div>
-        <h2 className="text-2xl font-semibold mb-1">Smart Stock Pricing</h2>
-        <p className="text-base text-gray-500 mb-4">
-          {"Maximum purchase price using Bazin's dividend yield method."}
+        <h2 className="text-[22pt] font-semibold mb-1">Ações</h2>
+        <p className="text-[13pt] font-normal text-gray-500 mb-4">
+          Preço máximo de compra usando o método de dividend yield do Bazin.
         </p>
         <SearchInput
           searchTerm={searchTerm}
@@ -181,7 +181,7 @@ export const StockList = ({
             className="ml-2 text-[#007AFF] font-normal px-2 py-1 rounded hover:underline"
             onClick={editMode ? handleDone : () => setEditMode(true)}
           >
-            {editMode ? 'Done' : 'Edit'}
+            {editMode ? 'Salvar' : 'Editar'}
           </button>
         )}
       </div>
@@ -208,20 +208,20 @@ export const StockList = ({
               variant="outline"
               onClick={() => setShowAll(true)}
             >
-              Show all
+              Mostrar todas
             </Button>
           </div>
         )}
       </div>
       {displayedStocks.length === 0 && (
-        <div className="text-center text-gray-500 mt-8">
+        <div className="text-center text-[11pt] text-sm text-gray-500 mt-8">
           <p>
             {selectedFilter === 'watchlist'
-              ? 'Your favorites is empty. Add some stocks to track them here.'
-              : 'Stocks not found'}
+              ? 'Ainda não há ações na sua lista. Adicione algumas ações para acompanhá-las aqui.'
+              : 'Nenhuma ação encontrada.'}
           </p>
           {selectedFilter !== 'watchlist' && (
-            <p>Try adjusting the filters or search term</p>
+            <p>Experimente outros filtros ou termos de busca.</p>
           )}
         </div>
       )}

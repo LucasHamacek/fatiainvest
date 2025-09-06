@@ -76,8 +76,8 @@ export const SearchInput = ({ searchTerm, setSearchTerm, stocks = [] }: SearchIn
       <form onSubmit={handleSubmit} autoComplete="off">
         <Search className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
         <Input
-          placeholder="Search"
-          className="pl-9 pr-10 bg-gray-100 border-0 shadow-none rounded-md text-sm"
+          placeholder="Buscar"
+          className="pl-9 pr-10 bg-gray-100 border-0 shadow-none rounded-md text-[10pt]"
           value={inputValue}
           onChange={handleChange}
           onFocus={() => setShowSuggestions(true)}
