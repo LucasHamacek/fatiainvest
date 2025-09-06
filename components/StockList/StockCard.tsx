@@ -17,7 +17,7 @@ interface StockCardProps {
 export const StockCard = ({ stock, onClick }: StockCardProps) => {
   return (
     <Card
-      className="flex flex-row justify-between items-center w-full bg-transparent p-0 mb-4 border-0 shadow-none cursor-pointer"
+      className="flex flex-row justify-between items-center w-full bg-transparent p-0 mb-5 border-0 shadow-none cursor-pointer"
       onClick={() => onClick(stock)}
     >
       <CardHeader className="w-full p-0 gap-0">

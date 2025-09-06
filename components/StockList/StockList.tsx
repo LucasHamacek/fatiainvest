@@ -104,7 +104,7 @@ export const StockList = ({
     : filteredStocks;
 
   // Paginação: mostra só 10 por padrão
-  const displayedStocks = showAll ? filteredList : filteredList.slice(0, 10);
+  const displayedStocks = showAll ? filteredList : filteredList.slice(0, 7);
 
   // Empty state para watchlist sem login
   if (selectedFilter === 'watchlist' && !user) {
@@ -178,7 +178,7 @@ export const StockList = ({
         <FilterSelect selectedFilter={selectedFilter} onFilterChange={onFilterChange} />
         {selectedFilter === 'watchlist' && filteredStocks.length > 0 && (
           <button
-            className="ml-2 text-[#007AFF] font-normal px-2 py-1 rounded hover:underline"
+            className="ml-2 text-[#007AFF] font-normal py-1 rounded hover:underline transition-colors duration-200"
             onClick={editMode ? handleDone : () => setEditMode(true)}
           >
             {editMode ? 'Salvar' : 'Editar'}
@@ -188,21 +188,34 @@ export const StockList = ({
 
       <div>
         {displayedStocks.map((stock) => (
-          <div key={stock.ticker} className="flex items-center justify-between group">
-            <StockCard stock={stock} onClick={onStockClick} />
-            {selectedFilter === 'watchlist' && editMode && (
-              <button
-                className={`flex items-center justify-center w-16 mb-4 text-red-500 hover:text-red-700 ${toRemove.has(stock.ticker) ? 'opacity-100' : 'opacity-60'}`}
-                onClick={() => handleToggleRemove(stock.ticker)}
-                aria-label="Selecionar para remover"
+          <div key={stock.ticker} className="relative flex items-center group">
+            <div className={`flex-1 transition-all duration-300 ease-in-out ${selectedFilter === 'watchlist' && editMode ? 'pr-16' : 'pr-0'
+              }`}>
+              <StockCard stock={stock} onClick={onStockClick} />
+            </div>
+            {selectedFilter === 'watchlist' && (
+              <div
+                className={`absolute right-0 flex items-center justify-center w-16 pl-4 pb-5 h-full transition-all duration-300 ease-in-out transform ${editMode
+                    ? 'translate-x-0 opacity-100 scale-100'
+                    : 'translate-x-4 opacity-0 scale-95 pointer-events-none'
+                  }`}
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill={toRemove.has(stock.ticker) ? '#ef4444' : 'none'} stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
-              </button>
+                <button
+                  className={`text-red-500 hover:text-red-700 transition-colors duration-200 ${toRemove.has(stock.ticker) ? 'opacity-100' : 'opacity-60'
+                    }`}
+                  onClick={() => handleToggleRemove(stock.ticker)}
+                  aria-label="Selecionar para remover"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={toRemove.has(stock.ticker) ? '#ef4444' : '#ef4444'} width="28" height="28">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             )}
           </div>
         ))}
         {/* Botão para mostrar todas as ações se houver mais de 10 */}
-        {!showAll && filteredList.length > 10 && (
+        {!showAll && filteredList.length > 7 && (
           <div className="flex justify-center mt-4">
             <Button
               variant="outline"
