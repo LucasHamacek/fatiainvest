@@ -124,44 +124,44 @@ export default function SettingsPage() {
             </Button>
             <Card className="mb-6 shadow-none border-0 bg-transparent">
                 <CardHeader className="p-0">
-                    <CardTitle className="text-2xl font-normal">Profile</CardTitle>
+                    <CardTitle className="text-2xl font-normal">Perfil</CardTitle>
                     <Separator className="mb-2" />
                 </CardHeader>
                 <CardContent className="space-y-4 px-0">
                     <div>
-                        <Label className="mb-2" htmlFor="name">Name</Label>
-                        <Input id="name" name="name" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} disabled={loading || saving} />
+                        <Label className="mb-2" htmlFor="name">Nome</Label>
+                        <Input id="name" name="name" placeholder="Seu nome" value={name} onChange={e => setName(e.target.value)} disabled={loading || saving} />
                     </div>
                     <div>
                         <Label className="mb-2" htmlFor="email">Email</Label>
-                        <Input id="email" name="email" type="email" placeholder="Your email" value={email} onChange={e => setEmail(e.target.value)} disabled={loading || saving} />
+                        <Input id="email" name="email" type="email" placeholder="Seu email" value={email} onChange={e => setEmail(e.target.value)} disabled={loading || saving} />
                     </div>
                     <div>
-                        <Label className="mb-2" htmlFor="password">Password</Label>
-                        <Input id="password" name="password" type="password" placeholder="New password" value={password} onChange={e => setPassword(e.target.value)} disabled={loading || saving} className={password && !passwordValid ? "border-red-500" : ""} />
+                        <Label className="mb-2" htmlFor="password">Senha</Label>
+                        <Input id="password" name="password" type="password" placeholder="Nova senha" value={password} onChange={e => setPassword(e.target.value)} disabled={loading || saving} className={password && !passwordValid ? "border-red-500" : ""} />
                         <p className={`text-xs mt-1 ${password ? (passwordValid ? "text-green-600" : "text-red-600") : "text-gray-500"}`}>
                             8+ caracteres, maiúscula, minúscula e número
                         </p>
                     </div>
-                    <Button onClick={handleSave} disabled={loading || saving}>{saving ? "Saving..." : "Save changes"}</Button>
+                    <Button onClick={handleSave} disabled={loading || saving}>{saving ? "Salvando..." : "Salvar alterações"}</Button>
                 </CardContent>
             </Card>
             <Card className="mb-6 shadow-none border-0 bg-transparent">
                 <CardHeader className="p-0">
-                    <CardTitle className="text-2xl font-normal">Investor Profile</CardTitle>
+                    <CardTitle className="text-2xl font-normal">Perfil do Investidor</CardTitle>
                     <Separator />
                 </CardHeader>
                 <CardContent className="px-0">
                     <Select value={investorProfile} onValueChange={setInvestorProfile} disabled={profileSaving}>
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select a profile" />
+                            <SelectValue placeholder="Selecione um perfil" />
                             {profileSaving && <span className="ml-2 animate-spin">⏳</span>}
                         </SelectTrigger>
                         <SelectContent >
                             <SelectGroup>
-                                <SelectLabel>Profiles</SelectLabel>
-                                <SelectItem value="conservador">Conservative</SelectItem>
-                                <SelectItem value="agressivo">Aggressive</SelectItem>
+                                <SelectLabel>Perfis</SelectLabel>
+                                <SelectItem value="conservador">Conservador</SelectItem>
+                                <SelectItem value="agressivo">Agressivo</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -169,10 +169,10 @@ export default function SettingsPage() {
                 <CardFooter className="px-0">
                     <div className="mt-2 text-sm text-muted-foreground">
                         <div>
-                            <span className="font-semibold">Conservative:</span> Uses the classic Décio Bazin approach, considering the maximum price based on a 6% dividend yield (DY) as proposed by Bazin.
+                            <span className="font-semibold">Conservador:</span> Usa a abordagem clássica de Décio Bazin, considerando o preço máximo com base em um rendimento de dividendos (DY) de 6%, conforme proposto por Bazin.
                         </div>
                         <div className="mt-1">
-                            <span className="font-semibold">Aggressive:</span> Uses the maximum return the stock can offer, based on the average DY distributed by the company over the last 5 years.
+                            <span className="font-semibold">Agressivo:</span> Usa o retorno máximo que a ação pode oferecer, com base na média de DY distribuída pela empresa nos últimos 5 anos.
                         </div>
                     </div>
                 </CardFooter>
@@ -180,7 +180,7 @@ export default function SettingsPage() {
 
             <Card className="mb-6 shadow-none border-0 bg-transparent">
                 <CardHeader className="p-0">
-                    <CardTitle className="text-2xl font-normal">Theme</CardTitle>
+                    <CardTitle className="text-2xl font-normal">Tema</CardTitle>
                     <Separator />
                 </CardHeader>
                 <CardContent className="px-0">
@@ -191,10 +191,10 @@ export default function SettingsPage() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Themes</SelectLabel>
-                                    <SelectItem value="system">System</SelectItem>
-                                    <SelectItem value="light">Light</SelectItem>
-                                    <SelectItem value="dark">Dark</SelectItem>
+                                    <SelectLabel>Temas</SelectLabel>
+                                    <SelectItem value="system">Sistema</SelectItem>
+                                    <SelectItem value="light">Claro</SelectItem>
+                                    <SelectItem value="dark">Escuro</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

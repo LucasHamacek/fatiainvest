@@ -122,9 +122,9 @@ const RegisterPage = () => {
       <div className="flex items-center justify-center h-full">
         <Card className="w-full max-w-md shadow-none border-none">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Join the Fatia Invest</CardTitle>
+            <CardTitle className="text-2xl font-bold">Junte-se ao Fatia Invest</CardTitle>
             <CardDescription>
-              Fill in the details below to create your account
+              Preencha os dados abaixo para criar sua conta
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -138,12 +138,12 @@ const RegisterPage = () => {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">Nome</Label>
                 <div className="relative">
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Your full name"
+                    placeholder="Seu nome completo"
                     value={registerData.name}
                     onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
                     onKeyPress={handleKeyPress}
@@ -158,7 +158,7 @@ const RegisterPage = () => {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="seu@email.com"
                     value={registerData.email}
                     onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
                     onKeyPress={handleKeyPress}
@@ -168,12 +168,12 @@ const RegisterPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Senha</Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Minimum 8 characters"
+                    placeholder="Mínimo 8 caracteres"
                     value={registerData.password}
                     onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
                     onKeyPress={handleKeyPress}
@@ -181,17 +181,17 @@ const RegisterPage = () => {
                   />
                 </div>
                 <p className="text-xs text-gray-500">
-                  8+ characters, uppercase, lowercase and number
+                  8+ caracteres, maiúscula, minúscula e número
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                 <div className="relative">
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
+                    placeholder="Confirme sua senha"
                     value={registerData.confirmPassword}
                     onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
                     onKeyPress={handleKeyPress}
@@ -201,12 +201,12 @@ const RegisterPage = () => {
               </div>
 
               <Button onClick={handleRegister} className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Create Account'}
+                {isLoading ? 'Criando conta...' : 'Criar Conta'}
               </Button>
             </div>
 
             <div className="text-center text-sm text-gray-600">
-              Already have an account?{' '}
+              Já tem uma conta?{' '}
               <Button
                 variant={"link"}
                 onClick={() => router.push('/login')}

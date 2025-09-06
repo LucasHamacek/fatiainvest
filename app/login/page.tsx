@@ -66,9 +66,9 @@ const LoginPage = () => {
       <div className="flex items-center justify-center h-full">
         <Card className="w-full max-w-md border-none shadow-none">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Enter</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Entrar</CardTitle>
             <CardDescription className="text-center">
-              Welcome back.
+              Bem-vindo de volta.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -87,7 +87,7 @@ const LoginPage = () => {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="seu@email.com"
                     value={loginData.email}
                     onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                     onKeyPress={handleKeyPress}
@@ -97,12 +97,12 @@ const LoginPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Senha</Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Your password"
+                    placeholder="Sua senha"
                     value={loginData.password}
                     onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                     onKeyPress={handleKeyPress}
@@ -117,23 +117,23 @@ const LoginPage = () => {
                   className="text-sm text-blue-600 hover:text-blue-800"
                   disabled={isLoading}
                 >
-                  Forgot password?
+                  Esqueceu a senha?
                 </button>
               </div>
 
               <Button onClick={handleLogin} className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Log in'}
+                {isLoading ? 'Entrando...' : 'Entrar'}
               </Button>
             </div>
 
             <div className="text-center text-sm text-gray-600">
-              Don&apos;t have an account?{' '}
+              Não tem uma conta?{' '}
               <Button
                 onClick={() => router.push('/register')}
                 variant="link"
                 disabled={isLoading}
               >
-                Create account
+                Criar conta
               </Button>
             </div>
           </CardContent>
